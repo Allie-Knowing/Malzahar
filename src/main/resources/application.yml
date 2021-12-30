@@ -1,0 +1,7 @@
+auth:
+  jwt:
+    secret: ${JWT_SECRET}
+    exp:
+      access: ${JWT_ACCESS_EXP}
+      refresh: ${JWT_REFRESH_EXP}
+

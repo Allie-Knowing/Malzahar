@@ -1,0 +1,7 @@
+auth:
+  jwt:
+    secret: asdaf
+    exp:
+      access: 123
+      refresh: 45678910
+
