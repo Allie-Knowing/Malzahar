@@ -11,25 +11,14 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtTokenProvider {
 
-    private final AuthDetailService authDetailService;
-
-    @Value("${jwt.secret}")
-    private String secretKey;
-
-    @Value("${jwt.access.exp}")
-    private Long accessExp;
-
-    @Value("${jwt.refresh.exp}")
-    private Long refreshExp;
-
-    private static final String PREFIX = "Bearer ";
+    private final JwtConfigurationProperties jwtProperties;
 
     public String generateAccessToken(Integer id) {
-        return generateToken(id, "access", accessExp);
+        return generateToken(id, "access", jwtProperties.getExp().getAccess());
     }
 
     public String generateRefreshToken(Integer id) {
-        return generateToken(id, "refresh", refreshExp);
+        return generateToken(id, "refresh", jwtProperties.getExp().getRefresh());
     }
 
     private String generateToken(Integer id, String type, Long exp) {
@@ -38,7 +27,7 @@ public class JwtTokenProvider {
                 .setIssuedAt(new Date())
                 .setSubject(id.toString())
                 .setExpiration(new Date(System.currentTimeMillis() + exp * 1000))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecret())
                 .compact();
     }
 }
