@@ -1,3 +1,17 @@
+spring:
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL:jdbc}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL55Dialect
+    database: mysql
+    hibernate:
+      ddl-auto: update
+
 auth:
   jwt:
     secret: ${JWT_SECRET}
