@@ -5,8 +5,9 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 
-    INVALID_USER_TOKEN(401, "Invalid User token."),
-    INTERNAL_SERVER_ERROR(500, "Internal Server error.");
+    INVALID_USER_TOKEN(401, "Invalid user token."),
+    INTERNAL_SERVER_ERROR(500, "Internal server error."),
+    PROVIDER_DOES_NOT_MATCH(409, "Provider does not match.");
 
     private final Integer status;
     private final String message;
