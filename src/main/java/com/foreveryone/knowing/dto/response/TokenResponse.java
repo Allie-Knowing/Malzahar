@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class TokenResponse {
 
-    private final String access_token;
+    private final String accessToken;
 
-    private final String refresh_token;
+    private final String refreshToken;
 }

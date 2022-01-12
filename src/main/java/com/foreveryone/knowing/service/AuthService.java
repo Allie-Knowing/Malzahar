@@ -18,6 +18,8 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
+import static com.foreveryone.knowing.util.OauthProvider.*;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -53,7 +55,7 @@ public class AuthService {
         String id_token = googleAuthResponse.getId_token();
         GoogleTokenInfoResponse tokenInfo = googleTokenInfoClient.getTokenInfo(id_token);
 
-        Integer userId = getUserId(tokenInfo, "FACEBOOK");
+        Integer userId = getUserId(tokenInfo, GOOGLE);
         String accessToken = jwtTokenProvider.generateAccessToken(userId);
         String refreshToken = jwtTokenProvider.generateRefreshToken(userId);
 
@@ -78,11 +80,10 @@ public class AuthService {
                     .build());
         } else {
             user = optionalUser.get();
-            if (!user.getProvider().equals(provider)) {
-                throw new ProviderDoesNotMatchException("이미 다른 방법으로 가입하셨네요? " + user.getProvider() + " 계정으로 로그인해보세요!");
-            }
+            user.checkProvider(provider);
         }
 
         return user.getId();
     }
+
 }
