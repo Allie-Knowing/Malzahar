@@ -1,7 +1,7 @@
-package com.foreveryone.knowing.util.client;
+package com.foreveryone.knowing.util.client.google;
 
 import com.foreveryone.knowing.util.dto.request.GoogleAuthRequest;
-import com.foreveryone.knowing.util.dto.response.GoogleAuthResponse;
+import com.foreveryone.knowing.util.dto.response.google.GoogleAuthResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 
