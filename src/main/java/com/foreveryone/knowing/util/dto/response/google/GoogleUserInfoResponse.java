@@ -7,10 +7,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GoogleTokenInfoResponse {
+public class GoogleUserInfoResponse {
 
     private String email;
+
     private String name;
+
     private String picture;
 
 }
