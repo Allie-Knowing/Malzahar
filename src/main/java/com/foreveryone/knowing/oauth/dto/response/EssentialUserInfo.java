@@ -1,4 +1,4 @@
-package com.foreveryone.knowing.util.dto.response;
+package com.foreveryone.knowing.oauth.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

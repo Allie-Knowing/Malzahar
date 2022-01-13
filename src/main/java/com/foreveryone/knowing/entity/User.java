@@ -1,7 +1,7 @@
 package com.foreveryone.knowing.entity;
 
 import com.foreveryone.knowing.error.exceptions.ProviderDoesNotMatchException;
-import com.foreveryone.knowing.util.OauthProvider;
+import com.foreveryone.knowing.oauth.OauthProvider;
 import lombok.*;
 
 import javax.persistence.*;

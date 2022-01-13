@@ -1,4 +1,4 @@
-package com.foreveryone.knowing.util.dto.response.google;
+package com.foreveryone.knowing.oauth.dto.response.google;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

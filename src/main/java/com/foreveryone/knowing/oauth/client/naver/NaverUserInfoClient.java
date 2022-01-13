@@ -1,6 +1,6 @@
-package com.foreveryone.knowing.util.client.naver;
+package com.foreveryone.knowing.oauth.client.naver;
 
-import com.foreveryone.knowing.util.dto.response.naver.NaverUserInfoResponse;
+import com.foreveryone.knowing.oauth.dto.response.naver.NaverUserInfoResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;

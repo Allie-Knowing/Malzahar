@@ -1,4 +1,4 @@
-package com.foreveryone.knowing.util.dto.request;
+package com.foreveryone.knowing.oauth.dto.request;
 
 import lombok.*;
 

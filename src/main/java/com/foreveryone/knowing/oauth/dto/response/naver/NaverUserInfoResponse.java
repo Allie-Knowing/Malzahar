@@ -1,4 +1,4 @@
-package com.foreveryone.knowing.util.dto.response.naver;
+package com.foreveryone.knowing.oauth.dto.response.naver;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

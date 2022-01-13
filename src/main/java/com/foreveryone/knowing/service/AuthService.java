@@ -4,18 +4,18 @@ import com.foreveryone.knowing.dto.response.TokenResponse;
 import com.foreveryone.knowing.entity.User;
 import com.foreveryone.knowing.entity.UserRepository;
 import com.foreveryone.knowing.security.JwtTokenProvider;
-import com.foreveryone.knowing.util.OauthProvider;
-import com.foreveryone.knowing.util.client.google.GoogleAuthClient;
-import com.foreveryone.knowing.util.client.google.GoogleUserInfoClient;
-import com.foreveryone.knowing.util.client.naver.NaverAuthClient;
-import com.foreveryone.knowing.util.client.naver.NaverUserInfoClient;
-import com.foreveryone.knowing.util.dto.request.GoogleAuthRequest;
-import com.foreveryone.knowing.util.dto.request.NaverAuthRequest;
-import com.foreveryone.knowing.util.dto.response.EssentialUserInfo;
-import com.foreveryone.knowing.util.dto.response.google.GoogleAuthResponse;
-import com.foreveryone.knowing.util.dto.response.google.GoogleUserInfoResponse;
-import com.foreveryone.knowing.util.dto.response.naver.NaverAuthResponse;
-import com.foreveryone.knowing.util.dto.response.naver.NaverUserInfoResponse;
+import com.foreveryone.knowing.oauth.OauthProvider;
+import com.foreveryone.knowing.oauth.client.google.GoogleAuthClient;
+import com.foreveryone.knowing.oauth.client.google.GoogleUserInfoClient;
+import com.foreveryone.knowing.oauth.client.naver.NaverAuthClient;
+import com.foreveryone.knowing.oauth.client.naver.NaverUserInfoClient;
+import com.foreveryone.knowing.oauth.dto.request.GoogleAuthRequest;
+import com.foreveryone.knowing.oauth.dto.request.NaverAuthRequest;
+import com.foreveryone.knowing.oauth.dto.response.EssentialUserInfo;
+import com.foreveryone.knowing.oauth.dto.response.google.GoogleAuthResponse;
+import com.foreveryone.knowing.oauth.dto.response.google.GoogleUserInfoResponse;
+import com.foreveryone.knowing.oauth.dto.response.naver.NaverAuthResponse;
+import com.foreveryone.knowing.oauth.dto.response.naver.NaverUserInfoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-import static com.foreveryone.knowing.util.OauthProvider.*;
+import static com.foreveryone.knowing.oauth.OauthProvider.*;
 
 @Service
 @RequiredArgsConstructor
