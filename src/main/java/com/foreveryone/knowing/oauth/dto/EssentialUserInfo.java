@@ -1,5 +1,6 @@
-package com.foreveryone.knowing.oauth.dto.response;
+package com.foreveryone.knowing.oauth.dto;
 
+import com.foreveryone.knowing.oauth.OauthProvider;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,5 +15,7 @@ public class EssentialUserInfo {
     private final String picture;
 
     private final String name;
+
+    private final OauthProvider provider;
 
 }

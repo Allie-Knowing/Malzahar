@@ -3,6 +3,7 @@ package com.foreveryone.knowing.service;
 import com.foreveryone.knowing.dto.response.TokenResponse;
 import com.foreveryone.knowing.entity.User;
 import com.foreveryone.knowing.entity.UserRepository;
+import com.foreveryone.knowing.oauth.OauthRequestDtoBuilder;
 import com.foreveryone.knowing.security.JwtTokenProvider;
 import com.foreveryone.knowing.oauth.OauthProvider;
 import com.foreveryone.knowing.oauth.client.google.GoogleAuthClient;
@@ -11,17 +12,14 @@ import com.foreveryone.knowing.oauth.client.naver.NaverAuthClient;
 import com.foreveryone.knowing.oauth.client.naver.NaverUserInfoClient;
 import com.foreveryone.knowing.oauth.dto.request.GoogleAuthRequest;
 import com.foreveryone.knowing.oauth.dto.request.NaverAuthRequest;
-import com.foreveryone.knowing.oauth.dto.response.EssentialUserInfo;
+import com.foreveryone.knowing.oauth.dto.EssentialUserInfo;
 import com.foreveryone.knowing.oauth.dto.response.google.GoogleAuthResponse;
 import com.foreveryone.knowing.oauth.dto.response.google.GoogleUserInfoResponse;
 import com.foreveryone.knowing.oauth.dto.response.naver.NaverAuthResponse;
 import com.foreveryone.knowing.oauth.dto.response.naver.NaverUserInfoResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import static com.foreveryone.knowing.oauth.OauthProvider.*;
@@ -30,18 +28,6 @@ import static com.foreveryone.knowing.oauth.OauthProvider.*;
 @RequiredArgsConstructor
 public class AuthService {
 
-    @Value(value = "${oauth.google.client_id}")
-    private String GOOGLE_CLIENT_ID;
-    @Value(value = "${oauth.google.client_secret}")
-    private String GOOGLE_CLIENT_SECRET;
-    @Value(value = "${oauth.google.redirect_uri}")
-    private String GOOGLE_REDIRECT_URI;
-
-    @Value(value = "${oauth.naver.client_id}")
-    private String NAVER_CLIENT_ID;
-    @Value(value = "${oauth.naver.client_secret}")
-    private String NAVER_CLIENT_SECRET;
-
     private final UserRepository userRepository;
 
     private final GoogleAuthClient googleAuthClient;
@@ -49,17 +35,14 @@ public class AuthService {
     private final NaverAuthClient naverAuthClient;
     private final NaverUserInfoClient naverUserInfoClient;
 
+    private final OauthRequestDtoBuilder oauthDtoBuilder;
+
     private final JwtTokenProvider jwtTokenProvider;
+
 
     public TokenResponse googleLogin(String code) {
 
-        GoogleAuthRequest googleAuthRequest = GoogleAuthRequest.builder()
-                .code(URLDecoder.decode(code, StandardCharsets.UTF_8))
-                .client_id(GOOGLE_CLIENT_ID)
-                .client_secret(GOOGLE_CLIENT_SECRET)
-                .redirect_uri(GOOGLE_REDIRECT_URI)
-                .grant_type("authorization_code")
-                .build();
+        GoogleAuthRequest googleAuthRequest = oauthDtoBuilder.getGoogle(code);
 
         GoogleAuthResponse googleAuthResponse = googleAuthClient.googleAuth(googleAuthRequest);
         String idToken = googleAuthResponse.getIdToken();
@@ -69,22 +52,19 @@ public class AuthService {
         EssentialUserInfo userInfo = new EssentialUserInfo(
                 googleUserInfo.getEmail(),
                 googleUserInfo.getPicture(),
-                googleUserInfo.getName()
+                googleUserInfo.getName(),
+                GOOGLE
         );
 
-        Integer userId = getUserId(userInfo, GOOGLE);
+        Integer userId = getUserId(userInfo);
 
         return getTokenRes(userId);
     }
 
+
     public TokenResponse naverLogin(String code) {
 
-        NaverAuthRequest naverAuthRequest = NaverAuthRequest.builder()
-                .code(URLDecoder.decode(code, StandardCharsets.UTF_8))
-                .client_id(NAVER_CLIENT_ID)
-                .client_secret(NAVER_CLIENT_SECRET)
-                .grant_type("authorization_code")
-                .build();
+        NaverAuthRequest naverAuthRequest = oauthDtoBuilder.getNaver(code);
 
         NaverAuthResponse naverAuthResponse = naverAuthClient.naverAuth(naverAuthRequest);
         String accessToken = naverAuthResponse.getAccessToken();
@@ -95,37 +75,43 @@ public class AuthService {
         EssentialUserInfo userInfo = new EssentialUserInfo(
                 response.getEmail(),
                 response.getProfileImage(),
-                response.getName()
+                response.getName(),
+                NAVER
         );
 
-        Integer userId = getUserId(userInfo, NAVER);
+        Integer userId = getUserId(userInfo);
 
         return getTokenRes(userId);
     }
 
-    private Integer getUserId(EssentialUserInfo userInfo, OauthProvider provider) {
+
+    private Integer getUserId(EssentialUserInfo userInfo) {
 
         String email = userInfo.getEmail();
-        String picture = userInfo.getPicture();
-        String name = userInfo.getName();
 
         Optional<User> optionalUser = userRepository.findByEmail(email);
         User user;
 
         if (optionalUser.isEmpty()) {
-            user = userRepository.save(User.builder()
-                    .email(email)
-                    .profile(picture)
-                    .name(name)
-                    .provider(provider)
-                    .build());
+            user = saveUser(userInfo);
         } else {
             user = optionalUser.get();
-            user.checkProvider(provider);
+            user.checkProvider(userInfo.getProvider());
         }
 
         return user.getId();
     }
+
+
+    private User saveUser(EssentialUserInfo userInfo) {
+        return userRepository.save(User.builder()
+                .email(userInfo.getEmail())
+                .profile(userInfo.getPicture())
+                .name(userInfo.getName())
+                .provider(userInfo.getProvider())
+                .build());
+    }
+
 
     private TokenResponse getTokenRes(Integer userId) {
         String accessToken = jwtTokenProvider.generateAccessToken(userId);
