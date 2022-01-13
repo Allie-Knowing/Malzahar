@@ -1,7 +1,9 @@
 package com.foreveryone.knowing.controller;
 
 import com.foreveryone.knowing.dto.response.TokenResponse;
+import com.foreveryone.knowing.error.exceptions.UnsupportedProviderException;
 import com.foreveryone.knowing.service.AuthService;
+import com.foreveryone.knowing.util.OauthProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +18,15 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping
-    public TokenResponse google(@RequestParam String code) {
-        return authService.googleUserInfo(code);
+    public TokenResponse login(@RequestParam String code, @RequestParam OauthProvider provider) {
+        switch (provider) {
+            case GOOGLE:
+                return authService.googleLogin(code);
+            case NAVER:
+                return authService.naverLogin(code);
+            default:
+                throw new UnsupportedProviderException("지원하지 않는 provider 입니다~!");
+        }
+
     }
 }
