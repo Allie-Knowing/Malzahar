@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GoogleAuthResponse {
 
-    private String id_token;
+    private String idToken;
 
 }
