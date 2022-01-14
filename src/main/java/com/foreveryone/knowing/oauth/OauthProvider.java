@@ -1,4 +1,4 @@
-package com.foreveryone.knowing.util;
+package com.foreveryone.knowing.oauth;
 
 public enum OauthProvider {
     GOOGLE,

@@ -22,6 +22,7 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
         String errorDescription = "서버 오류";
         ErrorResponse res = ErrorResponse.of(errorCode, errorDescription);
+        e.printStackTrace();
 
         return new ResponseEntity<>(res, HttpStatus.valueOf(errorCode.getStatus()));
     }

@@ -7,7 +7,8 @@ public enum ErrorCode {
 
     INVALID_USER_TOKEN(401, "Invalid user token."),
     INTERNAL_SERVER_ERROR(500, "Internal server error."),
-    PROVIDER_DOES_NOT_MATCH(409, "Provider does not match.");
+    PROVIDER_DOES_NOT_MATCH(409, "Provider does not match."),
+    UNSUPPORTED_PROVIDER(400, "Unsupported provider.");
 
     private final Integer status;
     private final String message;
