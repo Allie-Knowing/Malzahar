@@ -5,7 +5,6 @@ import com.foreveryone.knowing.entity.User;
 import com.foreveryone.knowing.entity.UserRepository;
 import com.foreveryone.knowing.oauth.OauthRequestDtoBuilder;
 import com.foreveryone.knowing.security.JwtTokenProvider;
-import com.foreveryone.knowing.oauth.OauthProvider;
 import com.foreveryone.knowing.oauth.client.google.GoogleAuthClient;
 import com.foreveryone.knowing.oauth.client.google.GoogleUserInfoClient;
 import com.foreveryone.knowing.oauth.client.naver.NaverAuthClient;
@@ -58,7 +57,7 @@ public class AuthService {
 
         Integer userId = getUserId(userInfo);
 
-        return getTokenRes(userId);
+        return getTokenResponse(userId);
     }
 
 
@@ -81,7 +80,7 @@ public class AuthService {
 
         Integer userId = getUserId(userInfo);
 
-        return getTokenRes(userId);
+        return getTokenResponse(userId);
     }
 
 
@@ -113,7 +112,7 @@ public class AuthService {
     }
 
 
-    private TokenResponse getTokenRes(Integer userId) {
+    private TokenResponse getTokenResponse(Integer userId) {
         String accessToken = jwtTokenProvider.generateAccessToken(userId);
         String refreshToken = jwtTokenProvider.generateRefreshToken(userId);
 
