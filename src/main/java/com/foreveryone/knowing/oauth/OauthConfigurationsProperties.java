@@ -15,6 +15,7 @@ public class OauthConfigurationsProperties {
     private OauthProperty google;
     private OauthProperty naver;
     private OauthProperty facebook;
+    private OauthProperty kakao;
 
     @Getter
     @Setter

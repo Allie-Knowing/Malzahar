@@ -26,6 +26,8 @@ public class AuthController {
                 return authService.naverLogin(code);
             case FACEBOOK:
                 return authService.facebookLogin(code);
+            case KAKAO:
+                return authService.kakaoLogin(code);
             default:
                 throw new UnsupportedProviderException("[ " + provider + " ] 는 지원하지 않는 provider 입니다~!");
         }
