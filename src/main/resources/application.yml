@@ -27,3 +27,7 @@ oauth:
   naver:
     client_id: ${NAVER_CLIENT_ID}
     client_secret: ${NAVER_CLIENT_SECRET}
+  facebook:
+    client_id: ${FACEBOOK_CLIENT_ID}
+    client_secret: ${FACEBOOK_CLIENT_SECRET}
+    redirect_uri: ${FACEBOOK_REDIRECT_URI}
