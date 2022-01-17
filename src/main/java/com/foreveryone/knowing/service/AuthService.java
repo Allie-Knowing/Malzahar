@@ -4,6 +4,12 @@ import com.foreveryone.knowing.dto.response.TokenResponse;
 import com.foreveryone.knowing.entity.User;
 import com.foreveryone.knowing.entity.UserRepository;
 import com.foreveryone.knowing.oauth.OauthRequestDtoBuilder;
+import com.foreveryone.knowing.oauth.client.facebook.FacebookAuthClient;
+import com.foreveryone.knowing.oauth.client.facebook.FacebookUserInfoClient;
+import com.foreveryone.knowing.oauth.dto.request.FacebookAuthRequest;
+import com.foreveryone.knowing.oauth.dto.request.FacebookUserInfoRequest;
+import com.foreveryone.knowing.oauth.dto.response.facebook.FacebookAuthResponse;
+import com.foreveryone.knowing.oauth.dto.response.facebook.FacebookUserInfoResponse;
 import com.foreveryone.knowing.security.JwtTokenProvider;
 import com.foreveryone.knowing.oauth.client.google.GoogleAuthClient;
 import com.foreveryone.knowing.oauth.client.google.GoogleUserInfoClient;
@@ -33,6 +39,8 @@ public class AuthService {
     private final GoogleUserInfoClient googleUserInfoClient;
     private final NaverAuthClient naverAuthClient;
     private final NaverUserInfoClient naverUserInfoClient;
+    private final FacebookAuthClient facebookAuthClient;
+    private final FacebookUserInfoClient facebookUserInfoClient;
 
     private final OauthRequestDtoBuilder oauthDtoBuilder;
 
@@ -76,6 +84,32 @@ public class AuthService {
                 response.getProfileImage(),
                 response.getName(),
                 NAVER
+        );
+
+        Integer userId = getUserId(userInfo);
+
+        return getTokenResponse(userId);
+    }
+
+
+    public TokenResponse facebookLogin(String code) {
+
+        FacebookAuthRequest facebookAuthRequest = oauthDtoBuilder.getFacebook(code);
+
+        FacebookAuthResponse facebookAuthResponse = facebookAuthClient.facebookAuth(facebookAuthRequest);
+        String accessToken = facebookAuthResponse.getAccessToken();
+
+        FacebookUserInfoResponse facebookUserInfo = facebookUserInfoClient.facebookUserInfo(FacebookUserInfoRequest.builder()
+                .fields("name,email,picture")
+                .access_token(accessToken)
+                .build()
+        );
+
+        EssentialUserInfo userInfo = new EssentialUserInfo(
+                facebookUserInfo.getEmail(),
+                facebookUserInfo.getPicture().getData().getUrl(),
+                facebookUserInfo.getName(),
+                FACEBOOK
         );
 
         Integer userId = getUserId(userInfo);

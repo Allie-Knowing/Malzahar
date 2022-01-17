@@ -1,5 +1,6 @@
 package com.foreveryone.knowing.oauth;
 
+import com.foreveryone.knowing.oauth.dto.request.FacebookAuthRequest;
 import com.foreveryone.knowing.oauth.dto.request.GoogleAuthRequest;
 import com.foreveryone.knowing.oauth.dto.request.NaverAuthRequest;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,15 @@ public class OauthRequestDtoBuilder {
                 .client_id(oauthConfigurationsProperties.getNaver().getClient_id())
                 .client_secret(oauthConfigurationsProperties.getNaver().getClient_secret())
                 .grant_type("authorization_code")
+                .build();
+    }
+
+    public FacebookAuthRequest getFacebook(String code) {
+        return FacebookAuthRequest.builder()
+                .client_id(oauthConfigurationsProperties.getFacebook().getClient_id())
+                .redirect_uri(oauthConfigurationsProperties.getFacebook().getRedirect_uri())
+                .client_secret(oauthConfigurationsProperties.getFacebook().getClient_secret())
+                .code(URLDecoder.decode(code, StandardCharsets.UTF_8))
                 .build();
     }
 }
