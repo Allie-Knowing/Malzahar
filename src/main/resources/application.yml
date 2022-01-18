@@ -27,3 +27,11 @@ oauth:
   naver:
     client_id: ${NAVER_CLIENT_ID}
     client_secret: ${NAVER_CLIENT_SECRET}
+  facebook:
+    client_id: ${FACEBOOK_CLIENT_ID}
+    client_secret: ${FACEBOOK_CLIENT_SECRET}
+    redirect_uri: ${FACEBOOK_REDIRECT_URI}
+  kakao:
+    client_id: ${KAKAO_CLIENT_ID}
+    client_secret: ${KAKAO_CLIENT_SECRET}
+    redirect_uri: ${KAKAO_REDIRECT_URI}

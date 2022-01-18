@@ -24,8 +24,12 @@ public class AuthController {
                 return authService.googleLogin(code);
             case NAVER:
                 return authService.naverLogin(code);
+            case FACEBOOK:
+                return authService.facebookLogin(code);
+            case KAKAO:
+                return authService.kakaoLogin(code);
             default:
-                throw new UnsupportedProviderException("지원하지 않는 provider 입니다~!");
+                throw new UnsupportedProviderException("[ " + provider + " ] 는 지원하지 않는 provider 입니다~!");
         }
 
     }
