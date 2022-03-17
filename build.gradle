@@ -1,3 +1,9 @@
+buildscript {
+	ext {
+		junitVersion = '5.7.0'
+		assertjVersion = '3.19.0'
+	}
+}
 plugins {
 	id 'org.springframework.boot' version '2.5.5'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -19,19 +25,33 @@ repositories {
 }
 
 dependencies {
+	//starter
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	//openfeign
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:3.0.3'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	//jwt
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'com.github.tomakehurst:wiremock:2.27.2'
+	//lombok
 	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'mysql:mysql-connector-java'
-	annotationProcessor 'org.projectlombok:lombok'
+
+	//mockito
+	implementation 'org.mockito:mockito-junit-jupiter:4.3.1'
+	testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.3.1'
+
+	//test
+	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitVersion
+	testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitVersion
+	testImplementation group: 'org.assertj', name: 'assertj-core', version: assertjVersion
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
+
 }
 
 test {

@@ -5,3 +5,34 @@ auth:
       access: 123
       refresh: 45678910
 
+spring:
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb
+
+oauth:
+  google:
+    client_id: client_id
+    client_secret: client_secret
+    redirect_uri: redirect_uri
+    auth_url: http://localhost:9561
+    userinfo_url: http://localhost:9561
+  naver:
+    client_id: client_id
+    client_secret: client_secret
+    auth_url: http://localhost:9561
+    userinfo_url: http://localhost:9561
+  facebook:
+    client_id: client_id
+    client_secret: client_secret
+    redirect_uri: redirect_uri
+    auth_url: http://localhost:9561
+    userinfo_url: http://localhost:9561
+  kakao:
+    client_id: client_id
+    client_secret: client_secret
+    redirect_uri: redirect_uri
+    auth_url: http://localhost:9561
+    userinfo_url: http://localhost:9561

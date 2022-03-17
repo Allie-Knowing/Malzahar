@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@FeignClient(name = "naverAuthClient", url = "https://nid.naver.com/oauth2.0")
+@FeignClient(name = "naverAuthClient", url = "${oauth.naver.auth_url}")
 public interface NaverAuthClient {
 
     @GetMapping(produces = "application/json", value = "/token")

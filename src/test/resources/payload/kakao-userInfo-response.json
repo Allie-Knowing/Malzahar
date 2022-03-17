@@ -1,0 +1,10 @@
+{
+  "kakao_account": {
+    "email": "email",
+    "profile": {
+      "nickname": "nickname",
+      "thumbnail_image_url": "thumbnail_image_url"
+    },
+    "has_email": true
+  }
+}

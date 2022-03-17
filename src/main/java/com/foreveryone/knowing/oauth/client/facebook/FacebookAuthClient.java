@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@FeignClient(value = "facebookAuthClient", url = "https://graph.facebook.com")
+@FeignClient(value = "facebookAuthClient", url = "${oauth.facebook.auth_url}")
 public interface FacebookAuthClient {
 
     @GetMapping(value = "/v12.0/oauth/access_token")
