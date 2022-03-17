@@ -5,7 +5,7 @@ import com.foreveryone.knowing.oauth.dto.response.google.GoogleAuthResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@FeignClient(name = "googleAuthClient", url = "https://oauth2.googleapis.com")
+@FeignClient(name = "googleAuthClient", url = "${oauth.google.auth_url}")
 public interface GoogleAuthClient {
 
     @PostMapping(produces = "application/json", value = "/token")
