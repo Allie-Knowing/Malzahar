@@ -12,7 +12,7 @@ public class WireMockConfig {
     private WireMockServer wireMockServer;
 
     @Bean(initMethod = "start", destroyMethod = "stop")
-    public WireMockServer mockGoogleAuthService() {
+    public WireMockServer mockAuthService() {
         return new WireMockServer(9561);
     }
 }

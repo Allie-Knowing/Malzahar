@@ -4,6 +4,7 @@ import com.foreveryone.knowing.mocks.FacebookMocks;
 import com.foreveryone.knowing.mocks.GoogleMocks;
 import com.foreveryone.knowing.WireMockConfig;
 import com.foreveryone.knowing.entity.UserRepository;
+import com.foreveryone.knowing.mocks.NaverMocks;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +41,8 @@ class AuthControllerTest {
         GoogleMocks.setUpMockGoogleUserInfoResponse(mockServer);
         FacebookMocks.setUpMockFacebookAuthResponse(mockServer);
         FacebookMocks.setUpMockFacebookUserInfoResponse(mockServer);
+        NaverMocks.setUpMockNaverAuthResponse(mockServer);
+        NaverMocks.setUpMockNaverUserInfoResponse(mockServer);
     }
 
     @AfterEach

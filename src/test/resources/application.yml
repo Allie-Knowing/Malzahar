@@ -20,8 +20,8 @@ oauth:
     auth_url: http://localhost:9561
     userinfo_url: http://localhost:9561
   naver:
-    client_id: ${NAVER_CLIENT_ID}
-    client_secret: ${NAVER_CLIENT_SECRET}
+    client_id: client_id
+    client_secret: client_secret
     auth_url: http://localhost:9561
     userinfo_url: http://localhost:9561
   facebook:
