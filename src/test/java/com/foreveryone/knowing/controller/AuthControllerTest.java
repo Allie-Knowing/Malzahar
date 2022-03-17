@@ -1,6 +1,7 @@
 package com.foreveryone.knowing.controller;
 
-import com.foreveryone.knowing.GoogleMocks;
+import com.foreveryone.knowing.mocks.FacebookMocks;
+import com.foreveryone.knowing.mocks.GoogleMocks;
 import com.foreveryone.knowing.WireMockConfig;
 import com.foreveryone.knowing.entity.UserRepository;
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -31,12 +32,14 @@ class AuthControllerTest {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private WireMockServer mockGoogleAuthServer;
+    private WireMockServer mockServer;
 
     @BeforeEach
     void setUp() throws IOException {
-        GoogleMocks.setUpMockGoogleAuthResponse(mockGoogleAuthServer);
-        GoogleMocks.setUpMockGoogleUserInfoResponse(mockGoogleAuthServer);
+        GoogleMocks.setUpMockGoogleAuthResponse(mockServer);
+        GoogleMocks.setUpMockGoogleUserInfoResponse(mockServer);
+        FacebookMocks.setUpMockFacebookAuthResponse(mockServer);
+        FacebookMocks.setUpMockFacebookUserInfoResponse(mockServer);
     }
 
     @AfterEach
@@ -59,11 +62,31 @@ class AuthControllerTest {
     }
 
     @Test
-    void naverLogin() {
+    void naverLogin() throws Exception {
+        //given
+
+        //when
+        mvc.perform(post("/auth")
+                        .param("provider", "NAVER")
+                        .param("code", "code"))
+                .andExpect(status().isCreated());
+
+        //then
+        assertThat(userRepository.findAll().size()).isEqualTo(1);
     }
 
     @Test
-    void facebookLogin() {
+    void facebookLogin() throws Exception {
+        //given
+
+        //when
+        mvc.perform(post("/auth")
+                        .param("provider", "FACEBOOK")
+                        .param("code", "code"))
+                .andExpect(status().isCreated());
+
+        //then
+        assertThat(userRepository.findAll().size()).isEqualTo(1);
     }
 
     @Test

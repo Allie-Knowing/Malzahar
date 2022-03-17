@@ -1,4 +1,4 @@
-package com.foreveryone.knowing;
+package com.foreveryone.knowing.mocks;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
