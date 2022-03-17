@@ -5,7 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(value = "naverUserInfoClient", url = "https://openapi.naver.com")
+@FeignClient(value = "naverUserInfoClient", url = "${oauth.naver.userinfo_url}")
 public interface NaverUserInfoClient {
 
     @GetMapping(value = "/v1/nid/me")
