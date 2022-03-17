@@ -4,6 +4,7 @@ import com.foreveryone.knowing.mocks.FacebookMocks;
 import com.foreveryone.knowing.mocks.GoogleMocks;
 import com.foreveryone.knowing.WireMockConfig;
 import com.foreveryone.knowing.entity.UserRepository;
+import com.foreveryone.knowing.mocks.KakaoMocks;
 import com.foreveryone.knowing.mocks.NaverMocks;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
@@ -43,6 +44,8 @@ class AuthControllerTest {
         FacebookMocks.setUpMockFacebookUserInfoResponse(mockServer);
         NaverMocks.setUpMockNaverAuthResponse(mockServer);
         NaverMocks.setUpMockNaverUserInfoResponse(mockServer);
+        KakaoMocks.setUpMockKakaoAuthResponse(mockServer);
+        KakaoMocks.setUpMockKakaoUserInfoResponse(mockServer);
     }
 
     @AfterEach
@@ -93,6 +96,16 @@ class AuthControllerTest {
     }
 
     @Test
-    void kakaoLogin() {
+    void kakaoLogin() throws Exception {
+        //given
+
+        //when
+        mvc.perform(post("/auth")
+                        .param("provider", "KAKAO")
+                        .param("code", "code"))
+                .andExpect(status().isCreated());
+
+        //then
+        assertThat(userRepository.findAll().size()).isEqualTo(1);
     }
 }
