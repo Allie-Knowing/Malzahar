@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foreveryone.knowing.dto.response.TokenResponse;
 import com.foreveryone.knowing.entity.User;
-import com.foreveryone.knowing.entity.UserRepository;
+import com.foreveryone.knowing.repository.UserRepository;
 import com.foreveryone.knowing.oauth.OauthRequestDtoBuilder;
 import com.foreveryone.knowing.oauth.client.facebook.FacebookAuthClient;
 import com.foreveryone.knowing.oauth.client.facebook.FacebookUserInfoClient;
@@ -26,13 +26,10 @@ import com.foreveryone.knowing.oauth.dto.response.google.GoogleUserInfoResponse;
 import com.foreveryone.knowing.oauth.dto.response.naver.NaverAuthResponse;
 import com.foreveryone.knowing.oauth.dto.response.naver.NaverUserInfoResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Optional;
 
