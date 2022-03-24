@@ -3,7 +3,7 @@ package com.foreveryone.knowing.controller;
 import com.foreveryone.knowing.mocks.FacebookMocks;
 import com.foreveryone.knowing.mocks.GoogleMocks;
 import com.foreveryone.knowing.WireMockConfig;
-import com.foreveryone.knowing.entity.UserRepository;
+import com.foreveryone.knowing.repository.UserRepository;
 import com.foreveryone.knowing.mocks.KakaoMocks;
 import com.foreveryone.knowing.mocks.NaverMocks;
 import com.github.tomakehurst.wiremock.WireMockServer;
