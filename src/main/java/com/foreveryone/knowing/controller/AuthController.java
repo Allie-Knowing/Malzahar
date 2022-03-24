@@ -2,6 +2,7 @@ package com.foreveryone.knowing.controller;
 
 import com.foreveryone.knowing.dto.response.TokenResponse;
 import com.foreveryone.knowing.error.exceptions.UnsupportedProviderException;
+import com.foreveryone.knowing.security.JwtTokenProvider;
 import com.foreveryone.knowing.service.AuthService;
 import com.foreveryone.knowing.oauth.OauthProvider;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -31,5 +33,13 @@ public class AuthController {
                 throw new UnsupportedProviderException("[ " + provider + " ] 는 지원하지 않는 provider 입니다~!");
         }
 
+    }
+
+    @GetMapping("/{id}")
+    public TokenResponse generateToken(@PathVariable Integer id) {
+        return new TokenResponse(
+                jwtTokenProvider.generateAccessToken(id),
+                jwtTokenProvider.generateRefreshToken(id)
+                );
     }
 }
