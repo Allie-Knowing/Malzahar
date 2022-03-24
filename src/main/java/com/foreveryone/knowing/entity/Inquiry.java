@@ -1,15 +1,15 @@
 package com.foreveryone.knowing.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
-import java.sql.Clob;
 
 @Table(name = "inquiry")
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Inquiry {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +21,7 @@ public class Inquiry {
 
     @Lob
     @Column(name = "description")
-    private Clob description;
+    private String description;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)

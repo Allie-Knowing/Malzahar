@@ -1,14 +1,15 @@
 package com.foreveryone.knowing.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Table(name = "inquiry_category")
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class InquiryCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

@@ -1,7 +1,6 @@
 package com.foreveryone.knowing.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Clob;
@@ -10,7 +9,9 @@ import java.sql.Timestamp;
 @Table(name = "video")
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Video {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,7 +24,7 @@ public class Video {
 
     @Lob
     @Column(name = "description", nullable = false)
-    private Clob description;
+    private String description;
 
     @Column(name = "title", nullable = false)
     private String title;

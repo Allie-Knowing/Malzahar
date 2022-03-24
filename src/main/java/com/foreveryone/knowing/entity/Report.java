@@ -1,13 +1,18 @@
 package com.foreveryone.knowing.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.sql.Clob;
 
 @Table(name = "report")
 @Entity
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Report {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,7 +24,7 @@ public class Report {
     private User user;
 
     @Column(name = "description")
-    private Clob description;
+    private String description;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "video_id", nullable = false)
