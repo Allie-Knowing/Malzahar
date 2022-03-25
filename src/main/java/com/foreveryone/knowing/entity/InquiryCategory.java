@@ -23,4 +23,11 @@ public class InquiryCategory {
     @JoinColumn(name = "inquiry_id", nullable = false)
     private Inquiry inquiry;
 
+    @Enumerated
+    @Column(name = "category", nullable = false)
+    private Category category;
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 }
