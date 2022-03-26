@@ -30,9 +30,8 @@ public class AdminController {
         return adminService.reportList();
     }
 
-    @DeleteMapping("/{videoId}")
-    public void deleteVideo(@PathVariable Integer videoId, @RequestParam String secret) {
-        if (!secret.equals("secret")) throw new InvalidUserTokenException("시크릿쥬쥬");
+    @DeleteMapping("/video/{videoId}")
+    public void deleteVideo(@PathVariable Integer videoId) {
         adminService.deleteVideo(videoId);
     }
 

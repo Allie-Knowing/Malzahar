@@ -63,7 +63,7 @@ public class JwtTokenProvider {
 
     private boolean checkTokenType(String token) {
         try {
-            String type = Jwts.parser().setSigningKey(jwtProperties.getSecret()).parseClaimsJws(token).getBody().get("type", String.class);
+            String type = Jwts.parser().setSigningKey(jwtProperties.getSecret()).parseClaimsJws(token).getHeader().get("typ").toString();
             return type.equals("access");
         } catch (Exception e) {
             throw new InvalidUserTokenException("잘못된 토큰입니다");

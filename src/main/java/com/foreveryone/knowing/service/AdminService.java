@@ -2,8 +2,10 @@ package com.foreveryone.knowing.service;
 
 import com.foreveryone.knowing.dto.request.InquiryRequest;
 import com.foreveryone.knowing.dto.request.ReportRequest;
+import com.foreveryone.knowing.entity.Category;
 import com.foreveryone.knowing.entity.Inquiry;
 import com.foreveryone.knowing.entity.User;
+import com.foreveryone.knowing.error.exceptions.NotFoundException;
 import com.foreveryone.knowing.repository.InquiryRepository;
 import com.foreveryone.knowing.entity.Report;
 import com.foreveryone.knowing.repository.ReportRepository;
@@ -29,7 +31,9 @@ public class AdminService {
         reportRepository.save(Report.builder()
                 .description(reportRequest.getDescription())
                 .user(getCurrentUser())
-                .video(videoRepository.findById(reportRequest.getVideoId()).orElseThrow())
+                .video(videoRepository.findById(reportRequest.getVideoId()).orElseThrow(
+                                () -> new NotFoundException("video Id Not Found")
+                ))
                 .build());
     }
 
@@ -48,6 +52,7 @@ public class AdminService {
                 .title(inquiryRequest.getTitle())
                 .description(inquiryRequest.getDescription())
                 .user(getCurrentUser())
+                .category(Category.valueOf(inquiryRequest.getCategory()))
                 .build());
     }
 
