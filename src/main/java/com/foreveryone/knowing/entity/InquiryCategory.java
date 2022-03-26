@@ -3,6 +3,8 @@ package com.foreveryone.knowing.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Table(name = "inquiry_category")
 @Entity
@@ -19,15 +21,8 @@ public class InquiryCategory {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "inquiry_id", nullable = false)
-    private Inquiry inquiry;
-
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(name = "category", nullable = false)
     private Category category;
 
-    public void setCategory(Category category) {
-        this.category = category;
-    }
 }

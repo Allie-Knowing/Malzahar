@@ -5,6 +5,8 @@ import com.foreveryone.knowing.oauth.OauthProvider;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -29,6 +31,12 @@ public class User {
 
     @Column(length = 30, nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Report> reports = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Inquiry> inquiries = new ArrayList<>();
 
     public void checkProvider(OauthProvider provider) {
         if (!this.provider.equals(provider)) {
