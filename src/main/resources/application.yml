@@ -10,7 +10,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL55Dialect
     database: mysql
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
 
 auth:
   jwt:
