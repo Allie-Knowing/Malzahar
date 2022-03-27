@@ -9,6 +9,7 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(500, "Internal server error."),
     PROVIDER_DOES_NOT_MATCH(409, "Provider does not match."),
     UNSUPPORTED_PROVIDER(400, "Unsupported provider."),
+    ACCESS_DENIED(403, "Access denied."),
     NOT_FOUND(404, "Not found.");
 
     private final Integer status;
