@@ -1,5 +1,6 @@
 package com.foreveryone.knowing.dto.response;
 
+import com.foreveryone.knowing.entity.Category;
 import com.foreveryone.knowing.entity.Inquiry;
 import com.foreveryone.knowing.entity.Report;
 import lombok.AccessLevel;
@@ -16,12 +17,14 @@ public class AdminGetResponse {
         private final Integer userId;
         private final String title;
         private final String description;
+        private final Category category;
 
         public static InquiryResponse from(Inquiry inquiry) {
             return InquiryResponse.builder()
                     .userId(inquiry.getUser().getId())
                     .title(inquiry.getTitle())
                     .description(inquiry.getDescription())
+                    .category(inquiry.getCategory())
                     .build();
         }
     }

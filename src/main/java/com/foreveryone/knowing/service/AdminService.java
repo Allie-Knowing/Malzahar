@@ -57,7 +57,7 @@ public class AdminService {
     }
 
     public List<InquiryResponse> inquiryList() {
-        return inquiryRepository.findAll().stream()
+        return inquiryRepository.findAllByOrderByCategory().stream()
                 .map(InquiryResponse::from)
                 .collect(Collectors.toList());
     }
