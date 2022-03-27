@@ -7,6 +7,7 @@ import com.foreveryone.knowing.dto.response.AdminGetResponse.ReportResponse;
 import com.foreveryone.knowing.error.exceptions.InvalidUserTokenException;
 import com.foreveryone.knowing.service.AdminService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ public class AdminController {
     private final AdminService adminService;
 
     @PostMapping("/report") @PreAuthorize("isAuthenticated()")
+    @ResponseStatus(HttpStatus.CREATED)
     public void submitReport(@Valid @RequestBody ReportRequest reportRequest) {
         adminService.submitReport(reportRequest);
     }
@@ -31,11 +33,13 @@ public class AdminController {
     }
 
     @DeleteMapping("/video/{videoId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteVideo(@PathVariable Integer videoId) {
         adminService.deleteVideo(videoId);
     }
 
     @PostMapping("/inquiry") @PreAuthorize("isAuthenticated()")
+    @ResponseStatus(HttpStatus.CREATED)
     public void inquiry(@Valid @RequestBody InquiryRequest inquiryRequest) {
         adminService.inquiry(inquiryRequest);
     }
