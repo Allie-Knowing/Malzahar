@@ -23,7 +23,7 @@ public class GoogleMocks {
     }
 
     public static void setUpMockGoogleUserInfoResponse(WireMockServer mockService) throws IOException {
-        mockService.stubFor(WireMock.get(WireMock.urlEqualTo("/tokenInfo?id_token=idToken"))
+        mockService.stubFor(WireMock.get(WireMock.urlEqualTo("/tokeninfo?id_token=idToken"))
                 .willReturn(WireMock.aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
