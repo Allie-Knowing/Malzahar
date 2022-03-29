@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "googleUserInfo", url = "${oauth.google.userinfo_url}")
 public interface GoogleUserInfoClient {
 
-    @GetMapping(value = "/tokenInfo")
+    @GetMapping(value = "/tokeninfo")
     GoogleUserInfoResponse getUserInfo(@RequestParam String id_token);
 }
