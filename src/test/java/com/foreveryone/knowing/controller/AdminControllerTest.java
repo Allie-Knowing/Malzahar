@@ -81,7 +81,7 @@ class AdminControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new ReportRequest(video.getId(), "신고합니다.")))
                 .header("Authorization", "Bearer " + jwtTokenProvider.generateAccessToken(user.getId())))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -93,7 +93,7 @@ class AdminControllerTest {
     @Test
     void deleteVideo() throws Exception{
         mvc.perform(delete("/admin/video/" + video.getId()))
-                .andExpect(status().isOk());
+                .andExpect(status().isNoContent());
     }
 
     @Test
@@ -102,7 +102,7 @@ class AdminControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new InquiryRequest("BUG", "버그가 너무 많음", "쨋든 많음")))
                         .header("Authorization", "Bearer " + jwtTokenProvider.generateAccessToken(user.getId())))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
