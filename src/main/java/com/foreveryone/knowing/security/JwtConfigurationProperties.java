@@ -1,23 +1,29 @@
 package com.foreveryone.knowing.security;
 
 import lombok.Getter;
-import lombok.Setter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.context.properties.ConstructorBinding;
+
+import java.util.Base64;
 
 @Getter
-@Setter
-@Configuration
+@ConstructorBinding
 @ConfigurationProperties("auth.jwt")
 public class JwtConfigurationProperties {
 
-    private String secret;
-    private Exp exp;
+    private final String secret;
+    private final Exp exp;
+
+    public JwtConfigurationProperties(String secret, Exp exp) {
+        this.secret = Base64.getEncoder().encodeToString(secret.getBytes());
+        this.exp = exp;
+    }
 
     @Getter
-    @Setter
+    @RequiredArgsConstructor
     public static class Exp {
-        private Long access;
-        private Long refresh;
+        private final Long access;
+        private final Long refresh;
     }
 }
