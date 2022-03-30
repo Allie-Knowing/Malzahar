@@ -50,19 +50,18 @@ class AdminControllerTest {
 
     @BeforeEach
     void setUp() {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
         user = userRepository.save(User.builder()
                         .email("kwak@email")
                         .name("name")
                         .profile("profile_image")
                         .provider(OauthProvider.GOOGLE)
+                        .createdAt(now)
+                .updatedAt(now)
+                .lastAccessedAt(now)
                 .build()
         );
         video = videoRepository.save(Video.builder()
-                .description("description")
-                        .title("title")
-                        .createdAt(new Timestamp(1))
-                .idAdoption(false)
-                .videoUrl("video.com")
                 .user(user)
                 .build());
     }
@@ -85,19 +84,19 @@ class AdminControllerTest {
     }
 
     @Test
-    void reportList() throws Exception{
+    void reportList() throws Exception {
         mvc.perform(get("/admin/report"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void deleteVideo() throws Exception{
+    void deleteVideo() throws Exception {
         mvc.perform(delete("/admin/video/" + video.getId()))
                 .andExpect(status().isNoContent());
     }
 
     @Test
-    void inquiry() throws Exception{
+    void inquiry() throws Exception {
         mvc.perform(post("/admin/inquiry")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new InquiryRequest("BUG", "버그가 너무 많음", "쨋든 많음")))
@@ -106,7 +105,7 @@ class AdminControllerTest {
     }
 
     @Test
-    void inquiryList() throws Exception{
+    void inquiryList() throws Exception {
         mvc.perform(get("/admin/inquiry"))
                 .andExpect(status().isOk());
     }
