@@ -5,6 +5,7 @@ import com.foreveryone.knowing.oauth.OauthProvider;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -32,11 +32,20 @@ public class User {
     @Column(length = 30, nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Report> reports = new ArrayList<>();
+    @Column(name = "created_at", nullable = false)
+    private Timestamp createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private Timestamp updatedAt;
+
+    @Column(name = "last_accessed_at", nullable = false)
+    private Timestamp lastAccessedAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private List<Inquiry> inquiries = new ArrayList<>();
+    private final List<Report> reports = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private final List<Inquiry> inquiries = new ArrayList<>();
 
     public void checkProvider(OauthProvider provider) {
         if (!this.provider.equals(provider)) {

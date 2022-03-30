@@ -14,15 +14,14 @@ import java.util.List;
 @Builder
 public class InquiryCategory {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "title", nullable = false)
-    private String title;
-
     @Enumerated(EnumType.STRING)
-    @Column(name = "category", nullable = false)
+    @Column(name = "title", nullable = false)
     private Category category;
 
+    @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "inquiryCategory", orphanRemoval = true)
+    private Inquiry inquiry;
 }

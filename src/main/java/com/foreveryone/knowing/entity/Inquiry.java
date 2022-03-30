@@ -3,6 +3,7 @@ package com.foreveryone.knowing.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Table(name = "inquiry")
 @Entity
@@ -12,14 +13,13 @@ import javax.persistence.*;
 @Builder
 public class Inquiry {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Lob
     @Column(name = "description")
     private String description;
 
@@ -27,8 +27,14 @@ public class Inquiry {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Category category;
+    @Column(name = "created_at", nullable = false)
+    private Timestamp createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private Timestamp updatedAt;
+
+    @OneToOne(optional = false, orphanRemoval = true)
+    @JoinColumn(name = "inquiry_category_id", nullable = false)
+    private InquiryCategory inquiryCategory;
 
 }

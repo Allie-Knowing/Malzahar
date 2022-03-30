@@ -30,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.sql.Timestamp;
 import java.util.Map;
 import java.util.Optional;
 
@@ -173,11 +174,15 @@ public class AuthService {
 
 
     private User saveUser(EssentialUserInfo userInfo) {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
         return userRepository.save(User.builder()
                 .email(userInfo.getEmail())
                 .profile(userInfo.getPicture())
                 .name(userInfo.getName())
                 .provider(userInfo.getProvider())
+                .createdAt(now)
+                .updatedAt(now)
+                .lastAccessedAt(now)
                 .build());
     }
 

@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.sql.Timestamp;
+
 public class AdminGetResponse {
 
     @Getter
@@ -18,13 +20,15 @@ public class AdminGetResponse {
         private final String title;
         private final String description;
         private final Category category;
+        private final Timestamp createdAt;
 
         public static InquiryResponse from(Inquiry inquiry) {
             return InquiryResponse.builder()
                     .userId(inquiry.getUser().getId())
                     .title(inquiry.getTitle())
                     .description(inquiry.getDescription())
-                    .category(inquiry.getCategory())
+                    .category(inquiry.getInquiryCategory().getCategory())
+                    .createdAt(inquiry.getCreatedAt())
                     .build();
         }
     }
@@ -36,12 +40,14 @@ public class AdminGetResponse {
         private final Integer videoId;
         private final Integer userId;
         private final String description;
+        private final Timestamp createdAt;
 
         public static ReportResponse from(Report report) {
             return ReportResponse.builder()
                     .videoId(report.getVideo().getId())
                     .userId(report.getUser().getId())
                     .description(report.getDescription())
+                    .createdAt(report.getCreatedAt())
                     .build();
         }
     }
