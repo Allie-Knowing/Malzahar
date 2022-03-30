@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Table(name = "report")
 @Entity
@@ -15,7 +16,7 @@ import javax.persistence.*;
 @Builder
 public class Report {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -29,5 +30,11 @@ public class Report {
     @ManyToOne(optional = false)
     @JoinColumn(name = "video_id", nullable = false)
     private Video video;
+
+    @Column(name = "created_at", nullable = false)
+    private Timestamp createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private Timestamp updatedAt;
 
 }
