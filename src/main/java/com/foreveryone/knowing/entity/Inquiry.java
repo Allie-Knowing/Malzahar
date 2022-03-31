@@ -30,9 +30,6 @@ public class Inquiry {
     @Column(name = "created_at", nullable = false)
     private Timestamp createdAt;
 
-    @Column(name = "updated_at", nullable = false)
-    private Timestamp updatedAt;
-
     @OneToOne(optional = false, orphanRemoval = true)
     @JoinColumn(name = "inquiry_category_id", nullable = false)
     private InquiryCategory inquiryCategory;
