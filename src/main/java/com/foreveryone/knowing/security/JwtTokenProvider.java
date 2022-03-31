@@ -31,9 +31,11 @@ public class JwtTokenProvider {
     }
 
     private String generateToken(Integer id, String type, Long exp) {
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("typ", type);
         return Jwts.builder()
-                .setHeaderParam("typ", type)
                 .setIssuedAt(new Date())
+                .setClaims(payload)
                 .setSubject(id.toString())
                 .setExpiration(new Date(System.currentTimeMillis() + exp * 1000))
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecret())
@@ -63,7 +65,7 @@ public class JwtTokenProvider {
 
     private boolean checkTokenType(String token) {
         try {
-            String type = Jwts.parser().setSigningKey(jwtProperties.getSecret()).parseClaimsJws(token).getHeader().get("typ").toString();
+            String type = Jwts.parser().setSigningKey(jwtProperties.getSecret()).parseClaimsJws(token).getBody().get("typ").toString();
             return type.equals("access");
         } catch (Exception e) {
             throw new InvalidUserTokenException("잘못된 토큰입니다");
