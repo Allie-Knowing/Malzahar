@@ -37,7 +37,6 @@ public class AdminService {
                                 () -> new NotFoundException("video Id Not Found")
                 ))
                 .createdAt(now)
-                .updatedAt(now)
                 .build());
     }
 
@@ -64,7 +63,6 @@ public class AdminService {
                 .user(getCurrentUser())
                 .inquiryCategory(inquiryCategory)
                 .createdAt(now)
-                .updatedAt(now)
                 .build());
 
     }
