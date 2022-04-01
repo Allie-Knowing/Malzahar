@@ -1,5 +1,6 @@
 package com.foreveryone.knowing.controller;
 
+import com.foreveryone.knowing.dto.request.CodeRequest;
 import com.foreveryone.knowing.dto.response.TokenResponse;
 import com.foreveryone.knowing.error.exceptions.UnsupportedProviderException;
 import com.foreveryone.knowing.service.AuthService;
@@ -7,6 +8,8 @@ import com.foreveryone.knowing.oauth.OauthProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
@@ -17,16 +20,16 @@ public class AuthController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TokenResponse login(@RequestParam String code, @RequestParam OauthProvider provider) {
+    public TokenResponse login(@Valid @RequestBody CodeRequest codeRequest, @RequestParam OauthProvider provider) {
         switch (provider) {
             case GOOGLE:
-                return authService.googleLogin(code);
+                return authService.googleLogin(codeRequest.getCode());
             case NAVER:
-                return authService.naverLogin(code);
+                return authService.naverLogin(codeRequest.getCode());
             case FACEBOOK:
-                return authService.facebookLogin(code);
+                return authService.facebookLogin(codeRequest.getCode());
             case KAKAO:
-                return authService.kakaoLogin(code);
+                return authService.kakaoLogin(codeRequest.getCode());
             default:
                 throw new UnsupportedProviderException("[ " + provider + " ] 는 지원하지 않는 provider 입니다~!");
         }

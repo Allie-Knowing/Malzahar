@@ -1,5 +1,7 @@
 package com.foreveryone.knowing.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.foreveryone.knowing.dto.request.CodeRequest;
 import com.foreveryone.knowing.mocks.FacebookMocks;
 import com.foreveryone.knowing.mocks.GoogleMocks;
 import com.foreveryone.knowing.WireMockConfig;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -33,6 +36,8 @@ class AuthControllerTest {
     private UserRepository userRepository;
     @Autowired
     private WireMockServer mockServer;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() throws IOException {
@@ -57,8 +62,9 @@ class AuthControllerTest {
 
         //when
         mvc.perform(post("/auth")
-                        .param("provider", "GOOGLE")
-                        .param("code", "code"))
+                .param("provider", "GOOGLE")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(new CodeRequest("code"))))
                 .andExpect(status().isCreated());
 
         //then
@@ -71,8 +77,9 @@ class AuthControllerTest {
 
         //when
         mvc.perform(post("/auth")
-                        .param("provider", "NAVER")
-                        .param("code", "code"))
+                .param("provider", "NAVER")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(new CodeRequest("code"))))
                 .andExpect(status().isCreated());
 
         //then
@@ -85,8 +92,9 @@ class AuthControllerTest {
 
         //when
         mvc.perform(post("/auth")
-                        .param("provider", "FACEBOOK")
-                        .param("code", "code"))
+                .param("provider", "FACEBOOK")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(new CodeRequest("code"))))
                 .andExpect(status().isCreated());
 
         //then
@@ -99,8 +107,9 @@ class AuthControllerTest {
 
         //when
         mvc.perform(post("/auth")
-                        .param("provider", "KAKAO")
-                        .param("code", "code"))
+                .param("provider", "KAKAO")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(new CodeRequest("code"))))
                 .andExpect(status().isCreated());
 
         //then
