@@ -23,13 +23,13 @@ public class AuthController {
     public TokenResponse login(@Valid @RequestBody CodeRequest codeRequest, @RequestParam OauthProvider provider) {
         switch (provider) {
             case GOOGLE:
-                return authService.googleLogin(codeRequest.getCode());
+                return authService.googleLogin(codeRequest);
             case NAVER:
-                return authService.naverLogin(codeRequest.getCode());
+                return authService.naverLogin(codeRequest);
             case FACEBOOK:
-                return authService.facebookLogin(codeRequest.getCode());
+                return authService.facebookLogin(codeRequest);
             case KAKAO:
-                return authService.kakaoLogin(codeRequest.getCode());
+                return authService.kakaoLogin(codeRequest);
             default:
                 throw new UnsupportedProviderException("[ " + provider + " ] 는 지원하지 않는 provider 입니다~!");
         }

@@ -64,7 +64,7 @@ class AuthControllerTest {
         mvc.perform(post("/auth")
                 .param("provider", "GOOGLE")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new CodeRequest("code"))))
+                .content(objectMapper.writeValueAsString(new CodeRequest("code", "redirect_uri"))))
                 .andExpect(status().isCreated());
 
         //then
@@ -79,7 +79,7 @@ class AuthControllerTest {
         mvc.perform(post("/auth")
                 .param("provider", "NAVER")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new CodeRequest("code"))))
+                .content(objectMapper.writeValueAsString(new CodeRequest("code", "redirect_uri"))))
                 .andExpect(status().isCreated());
 
         //then
@@ -94,7 +94,7 @@ class AuthControllerTest {
         mvc.perform(post("/auth")
                 .param("provider", "FACEBOOK")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new CodeRequest("code"))))
+                .content(objectMapper.writeValueAsString(new CodeRequest("code", "redirect_uri"))))
                 .andExpect(status().isCreated());
 
         //then
@@ -109,7 +109,7 @@ class AuthControllerTest {
         mvc.perform(post("/auth")
                 .param("provider", "KAKAO")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new CodeRequest("code"))))
+                .content(objectMapper.writeValueAsString(new CodeRequest("code", "redirect_uri"))))
                 .andExpect(status().isCreated());
 
         //then

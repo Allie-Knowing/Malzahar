@@ -1,5 +1,6 @@
 package com.foreveryone.knowing.error;
 
+import feign.FeignException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -16,6 +17,14 @@ public class GlobalExceptionHandler {
         ErrorResponse res = ErrorResponse.of(errorCode, errorDescription);
 
         return new ResponseEntity<>(res, HttpStatus.valueOf(errorCode.getStatus()));
+    }
+
+    @ExceptionHandler(FeignException.class)
+    public ResponseEntity<ErrorResponse> handleFeignException(FeignException e) {
+        String errorDescription = e.getMessage();
+        ErrorResponse res = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR, errorDescription);
+
+        return new ResponseEntity<>(res, HttpStatus.valueOf(e.status()));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
