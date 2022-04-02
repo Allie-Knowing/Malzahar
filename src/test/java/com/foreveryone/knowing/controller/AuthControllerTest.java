@@ -2,6 +2,7 @@ package com.foreveryone.knowing.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foreveryone.knowing.dto.request.CodeRequest;
+import com.foreveryone.knowing.dto.request.IdTokenRequest;
 import com.foreveryone.knowing.mocks.FacebookMocks;
 import com.foreveryone.knowing.mocks.GoogleMocks;
 import com.foreveryone.knowing.WireMockConfig;
@@ -61,10 +62,9 @@ class AuthControllerTest {
         //given
 
         //when
-        mvc.perform(post("/auth")
-                .param("provider", "GOOGLE")
+        mvc.perform(post("/google")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new CodeRequest("code"))))
+                .content(objectMapper.writeValueAsString(new IdTokenRequest("idToken"))))
                 .andExpect(status().isCreated());
 
         //then
@@ -79,7 +79,7 @@ class AuthControllerTest {
         mvc.perform(post("/auth")
                 .param("provider", "NAVER")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new CodeRequest("code"))))
+                .content(objectMapper.writeValueAsString(new CodeRequest("code", "redirect_uri"))))
                 .andExpect(status().isCreated());
 
         //then
@@ -94,7 +94,7 @@ class AuthControllerTest {
         mvc.perform(post("/auth")
                 .param("provider", "FACEBOOK")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new CodeRequest("code"))))
+                .content(objectMapper.writeValueAsString(new CodeRequest("code", "redirect_uri"))))
                 .andExpect(status().isCreated());
 
         //then
@@ -109,7 +109,7 @@ class AuthControllerTest {
         mvc.perform(post("/auth")
                 .param("provider", "KAKAO")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new CodeRequest("code"))))
+                .content(objectMapper.writeValueAsString(new CodeRequest("code", "redirect_uri"))))
                 .andExpect(status().isCreated());
 
         //then

@@ -2,6 +2,7 @@ package com.foreveryone.knowing.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.foreveryone.knowing.dto.request.CodeRequest;
 import com.foreveryone.knowing.dto.response.TokenResponse;
 import com.foreveryone.knowing.entity.User;
 import com.foreveryone.knowing.repository.UserRepository;
@@ -56,12 +57,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
 
-    public TokenResponse googleLogin(String code) {
-
-        GoogleAuthRequest googleAuthRequest = oauthDtoBuilder.getGoogle(code);
-
-        GoogleAuthResponse googleAuthResponse = googleAuthClient.googleAuth(googleAuthRequest);
-        String idToken = googleAuthResponse.getIdToken();
+    public TokenResponse googleLogin(String idToken) {
 
         GoogleUserInfoResponse googleUserInfo = googleUserInfoClient.getUserInfo(idToken);
 
@@ -78,9 +74,9 @@ public class AuthService {
     }
 
 
-    public TokenResponse naverLogin(String code) {
+    public TokenResponse naverLogin(CodeRequest codeRequest) {
 
-        NaverAuthRequest naverAuthRequest = oauthDtoBuilder.getNaver(code);
+        NaverAuthRequest naverAuthRequest = oauthDtoBuilder.getNaver(codeRequest.getCode());
 
         NaverAuthResponse naverAuthResponse = naverAuthClient.naverAuth(naverAuthRequest);
         String accessToken = naverAuthResponse.getAccessToken();
@@ -101,9 +97,11 @@ public class AuthService {
     }
 
 
-    public TokenResponse facebookLogin(String code) {
+    public TokenResponse facebookLogin(CodeRequest codeRequest) {
+        String code = codeRequest.getCode();
+        String redirectUri = codeRequest.getRedirectUri();
 
-        FacebookAuthRequest facebookAuthRequest = oauthDtoBuilder.getFacebook(code);
+        FacebookAuthRequest facebookAuthRequest = oauthDtoBuilder.getFacebook(code, redirectUri);
 
         FacebookAuthResponse facebookAuthResponse = facebookAuthClient.facebookAuth(facebookAuthRequest);
         String accessToken = facebookAuthResponse.getAccessToken();
@@ -126,8 +124,11 @@ public class AuthService {
         return getTokenResponse(userId);
     }
 
-    public TokenResponse kakaoLogin(String code) {
-        KakaoAuthRequest kakaoAuthRequest = oauthDtoBuilder.getKakao(code);
+    public TokenResponse kakaoLogin(CodeRequest codeRequest) {
+        String code = codeRequest.getCode();
+        String redirectUri = codeRequest.getRedirectUri();
+
+        KakaoAuthRequest kakaoAuthRequest = oauthDtoBuilder.getKakao(code, redirectUri);
 
         // Content-Type 을 application/x-www-form-urlencoded 로 설정하기 위해 MultiValueMap 사용
         // 참고 : https://jojoldu.tistory.com/478
