@@ -16,12 +16,12 @@ public class OauthRequestDtoBuilder {
 
     private final OauthConfigurationsProperties oauthConfigurationsProperties;
 
-    public GoogleAuthRequest getGoogle(String code) {
+    public GoogleAuthRequest getGoogle(String code, String redirectUri) {
         return GoogleAuthRequest.builder()
                 .code(URLDecoder.decode(code, StandardCharsets.UTF_8))
                 .client_id(oauthConfigurationsProperties.getGoogle().getClient_id())
                 .client_secret(oauthConfigurationsProperties.getGoogle().getClient_secret())
-                .redirect_uri(oauthConfigurationsProperties.getGoogle().getRedirect_uri())
+                .redirect_uri(redirectUri)
                 .grant_type("authorization_code")
                 .build();
     }
@@ -35,20 +35,20 @@ public class OauthRequestDtoBuilder {
                 .build();
     }
 
-    public FacebookAuthRequest getFacebook(String code) {
+    public FacebookAuthRequest getFacebook(String code, String redirectUri) {
         return FacebookAuthRequest.builder()
                 .client_id(oauthConfigurationsProperties.getFacebook().getClient_id())
-                .redirect_uri(oauthConfigurationsProperties.getFacebook().getRedirect_uri())
+                .redirect_uri(redirectUri)
                 .client_secret(oauthConfigurationsProperties.getFacebook().getClient_secret())
                 .code(URLDecoder.decode(code, StandardCharsets.UTF_8))
                 .build();
     }
 
-    public KakaoAuthRequest getKakao(String code) {
+    public KakaoAuthRequest getKakao(String code, String redirectUri) {
         return KakaoAuthRequest.builder()
                 .grant_type("authorization_code")
                 .client_id(oauthConfigurationsProperties.getKakao().getClient_id())
-                .redirect_uri(oauthConfigurationsProperties.getKakao().getRedirect_uri())
+                .redirect_uri(redirectUri)
                 .code(URLDecoder.decode(code, StandardCharsets.UTF_8))
                 .client_secret(oauthConfigurationsProperties.getKakao().getClient_secret())
                 .build();
