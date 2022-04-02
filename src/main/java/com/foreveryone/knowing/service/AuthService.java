@@ -57,14 +57,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
 
-    public TokenResponse googleLogin(CodeRequest codeRequest) {
-        String code = codeRequest.getCode();
-        String redirectUri = codeRequest.getRedirectUri();
-
-        GoogleAuthRequest googleAuthRequest = oauthDtoBuilder.getGoogle(code, redirectUri);
-
-        GoogleAuthResponse googleAuthResponse = googleAuthClient.googleAuth(googleAuthRequest);
-        String idToken = googleAuthResponse.getIdToken();
+    public TokenResponse googleLogin(String idToken) {
 
         GoogleUserInfoResponse googleUserInfo = googleUserInfoClient.getUserInfo(idToken);
 
