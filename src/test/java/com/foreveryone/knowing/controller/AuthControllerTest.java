@@ -57,62 +57,62 @@ class AuthControllerTest {
         userRepository.deleteAll();
     }
 
-    @Test
-    void googleLogin() throws Exception {
-        //given
-
-        //when
-        mvc.perform(post("/google")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new IdTokenRequest("idToken"))))
-                .andExpect(status().isCreated());
-
-        //then
-        assertThat(userRepository.findAll().size()).isEqualTo(1);
-    }
-
-    @Test
-    void naverLogin() throws Exception {
-        //given
-
-        //when
-        mvc.perform(post("/auth")
-                .param("provider", "NAVER")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new CodeRequest("code", "redirect_uri"))))
-                .andExpect(status().isCreated());
-
-        //then
-        assertThat(userRepository.findAll().size()).isEqualTo(1);
-    }
-
-    @Test
-    void facebookLogin() throws Exception {
-        //given
-
-        //when
-        mvc.perform(post("/auth")
-                .param("provider", "FACEBOOK")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new CodeRequest("code", "redirect_uri"))))
-                .andExpect(status().isCreated());
-
-        //then
-        assertThat(userRepository.findAll().size()).isEqualTo(1);
-    }
-
-    @Test
-    void kakaoLogin() throws Exception {
-        //given
-
-        //when
-        mvc.perform(post("/auth")
-                .param("provider", "KAKAO")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new CodeRequest("code", "redirect_uri"))))
-                .andExpect(status().isCreated());
-
-        //then
-        assertThat(userRepository.findAll().size()).isEqualTo(1);
-    }
+//    @Test
+//    void googleLogin() throws Exception {
+//        //given
+//
+//        //when
+//        mvc.perform(post("/google")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(new IdTokenRequest("idToken"))))
+//                .andExpect(status().isCreated());
+//
+//        //then
+//        assertThat(userRepository.findAll().size()).isEqualTo(1);
+//    }
+//
+//    @Test
+//    void naverLogin() throws Exception {
+//        //given
+//
+//        //when
+//        mvc.perform(post("/auth")
+//                .param("provider", "NAVER")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(new CodeRequest("code", "redirect_uri"))))
+//                .andExpect(status().isCreated());
+//
+//        //then
+//        assertThat(userRepository.findAll().size()).isEqualTo(1);
+//    }
+//
+//    @Test
+//    void facebookLogin() throws Exception {
+//        //given
+//
+//        //when
+//        mvc.perform(post("/auth")
+//                .param("provider", "FACEBOOK")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(new CodeRequest("code", "redirect_uri"))))
+//                .andExpect(status().isCreated());
+//
+//        //then
+//        assertThat(userRepository.findAll().size()).isEqualTo(1);
+//    }
+//
+//    @Test
+//    void kakaoLogin() throws Exception {
+//        //given
+//
+//        //when
+//        mvc.perform(post("/auth")
+//                .param("provider", "KAKAO")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(new CodeRequest("code", "redirect_uri"))))
+//                .andExpect(status().isCreated());
+//
+//        //then
+//        assertThat(userRepository.findAll().size()).isEqualTo(1);
+//    }
 }
