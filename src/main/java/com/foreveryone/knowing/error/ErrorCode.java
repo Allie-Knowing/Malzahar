@@ -11,6 +11,7 @@ public enum ErrorCode {
     UNSUPPORTED_PROVIDER(400, "Unsupported provider."),
     ACCESS_DENIED(403, "Access denied."),
     NOT_FOUND(404, "Not found."),
+    INVALID_REFRESH_TOKEN(401, "Invalid refresh token."),
     REQUIRE_PARAMETER_MISSING(400, "parameter missing.");
 
     private final Integer status;

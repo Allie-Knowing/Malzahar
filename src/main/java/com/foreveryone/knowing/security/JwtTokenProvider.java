@@ -51,7 +51,11 @@ public class JwtTokenProvider {
     }
 
     public boolean isAccessToken(String token){
-        return checkTokenType(token);
+        return checkTokenType(token, "access");
+    }
+
+    public boolean isRefreshToken(String token){
+        return checkTokenType(token, "refresh");
     }
 
     public Integer getId(String token) {
@@ -63,10 +67,13 @@ public class JwtTokenProvider {
         }
     }
 
-    private boolean checkTokenType(String token) {
+    private boolean checkTokenType(String token, String type) {
         try {
-            String type = Jwts.parser().setSigningKey(jwtProperties.getSecret()).parseClaimsJws(token).getBody().get("typ").toString();
-            return type.equals("access");
+            String tokenType = Jwts.parser().setSigningKey(jwtProperties.getSecret())
+                    .parseClaimsJws(token)
+                    .getBody()
+                    .get("typ").toString();
+            return tokenType.equals(type);
         } catch (Exception e) {
             throw new InvalidUserTokenException("잘못된 토큰입니다");
         }
