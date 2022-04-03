@@ -13,7 +13,6 @@ spring:
       ddl-auto: none
   redis:
     host: ${REDIS_HOST}
-    password: ${REDIS_PASS}
     port: ${REDIS_PORT}
 
 auth:
