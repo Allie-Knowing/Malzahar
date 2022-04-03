@@ -10,7 +10,7 @@ spring:
     property-naming-strategy: SNAKE_CASE
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1
+    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
   redis:
     host: localhost
     port: 6379
