@@ -44,7 +44,6 @@ public class AuthController {
     @PostMapping("/refresh")
     @ResponseStatus(HttpStatus.CREATED)
     public TokenResponse tokenRefresh(@RequestHeader("Refresh-Token") String refreshToken) {
-        System.out.println("refreshToken = " + refreshToken);
         return authService.tokenRefresh(refreshToken);
     }
 
