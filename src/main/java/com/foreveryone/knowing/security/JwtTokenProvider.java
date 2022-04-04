@@ -34,8 +34,8 @@ public class JwtTokenProvider {
         Map<String, Object> payload = new HashMap<>();
         payload.put("type", type);
         return Jwts.builder()
-                .setIssuedAt(new Date())
                 .setClaims(payload)
+                .setIssuedAt(new Date())
                 .setSubject(id.toString())
                 .setExpiration(new Date(System.currentTimeMillis() + exp * 1000))
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecret())
