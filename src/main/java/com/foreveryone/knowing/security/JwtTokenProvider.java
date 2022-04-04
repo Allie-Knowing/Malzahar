@@ -32,7 +32,7 @@ public class JwtTokenProvider {
 
     private String generateToken(Integer id, String type, Long exp) {
         Map<String, Object> payload = new HashMap<>();
-        payload.put("typ", type);
+        payload.put("type", type);
         return Jwts.builder()
                 .setIssuedAt(new Date())
                 .setClaims(payload)
