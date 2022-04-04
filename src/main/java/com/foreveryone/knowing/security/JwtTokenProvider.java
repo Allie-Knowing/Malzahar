@@ -72,7 +72,7 @@ public class JwtTokenProvider {
             String tokenType = Jwts.parser().setSigningKey(jwtProperties.getSecret())
                     .parseClaimsJws(token)
                     .getBody()
-                    .get("typ").toString();
+                    .get("type").toString();
             return tokenType.equals(type);
         } catch (Exception e) {
             throw new InvalidUserTokenException("잘못된 토큰입니다");
