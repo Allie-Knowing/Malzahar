@@ -5,14 +5,14 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 
-    INVALID_USER_TOKEN(401, "Invalid user token."),
-    INTERNAL_SERVER_ERROR(500, "Internal server error."),
-    PROVIDER_DOES_NOT_MATCH(409, "Provider does not match."),
+    REQUIRE_PARAMETER_MISSING(400, "parameter missing."),
     UNSUPPORTED_PROVIDER(400, "Unsupported provider."),
+    INVALID_USER_TOKEN(401, "Invalid user token."),
+    INVALID_REFRESH_TOKEN(401, "Invalid refresh token."),
     ACCESS_DENIED(403, "Access denied."),
     NOT_FOUND(404, "Not found."),
-    INVALID_REFRESH_TOKEN(401, "Invalid refresh token."),
-    REQUIRE_PARAMETER_MISSING(400, "parameter missing.");
+    PROVIDER_DOES_NOT_MATCH(409, "Provider does not match."),
+    INTERNAL_SERVER_ERROR(500, "Internal server error.");
 
     private final Integer status;
     private final String message;
