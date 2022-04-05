@@ -20,4 +20,13 @@ public class ErrorResponse {
                 .description(description)
                 .build();
     }
+
+    @Override
+    public String toString() {
+        return "{\n" +
+                "\t\"status\":" + status +
+                ",\n\t\"message\":\"" + message + '\"' +
+                ",\n\t\"description\":" + description + '\"' +
+                "\n}";
+    }
 }
