@@ -39,3 +39,5 @@ oauth:
     redirect_uri: redirect_uri
     auth_url: http://localhost:9561
     userinfo_url: http://localhost:9561
+  apple:
+    auth_url: localhost

@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class IdTokenRequest {
 
-    String idToken;
-    String name;
+    private String idToken;
+    private String name;
 }
