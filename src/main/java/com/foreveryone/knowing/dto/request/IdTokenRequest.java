@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class IdTokenRequest {
 
     String idToken;
+    String name;
 }

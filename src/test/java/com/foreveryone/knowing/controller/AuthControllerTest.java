@@ -64,7 +64,7 @@ class AuthControllerTest {
 //        //when
 //        mvc.perform(post("/google")
 //                .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(new IdTokenRequest("idToken"))))
+//                .content(objectMapper.writeValueAsString(new IdTokenRequest("idToken", null))))
 //                .andExpect(status().isCreated());
 //
 //        //then

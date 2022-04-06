@@ -1,11 +1,14 @@
 package com.foreveryone.knowing.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foreveryone.knowing.dto.request.CodeRequest;
+import com.foreveryone.knowing.dto.request.IdTokenRequest;
 import com.foreveryone.knowing.dto.response.TokenResponse;
 import com.foreveryone.knowing.entity.RefreshToken;
 import com.foreveryone.knowing.entity.User;
+import com.foreveryone.knowing.oauth.AppleJwtUtils;
 import com.foreveryone.knowing.error.exceptions.InvalidRefreshTokenException;
 import com.foreveryone.knowing.repository.RefreshTokenRepository;
 import com.foreveryone.knowing.repository.UserRepository;
@@ -28,11 +31,14 @@ import com.foreveryone.knowing.oauth.dto.EssentialUserInfo;
 import com.foreveryone.knowing.oauth.dto.response.google.GoogleUserInfoResponse;
 import com.foreveryone.knowing.oauth.dto.response.naver.NaverAuthResponse;
 import com.foreveryone.knowing.oauth.dto.response.naver.NaverUserInfoResponse;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.Timestamp;
 import java.util.Map;
 import java.util.Optional;
@@ -58,6 +64,8 @@ public class AuthService {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtConfigurationProperties jwtConfigurationProperties;
+
+    private final AppleJwtUtils appleJwtUtils;
 
 
     public TokenResponse googleLogin(String idToken) {
@@ -158,7 +166,24 @@ public class AuthService {
         return getTokenResponse(userId);
     }
 
-    public TokenResponse tokenRefresh(String refreshToken) {
+  public TokenResponse appleLogin(IdTokenRequest idTokenRequest) throws JsonProcessingException, NoSuchAlgorithmException, InvalidKeySpecException {
+
+        Claims claims = appleJwtUtils.getClaimsBy(idTokenRequest.getIdToken());
+
+        String email = claims.get("email", String.class);
+        EssentialUserInfo userInfo = new EssentialUserInfo(
+                email,
+                null,
+                idTokenRequest.getName() == null ? email.split("@")[0] : idTokenRequest.getName(),
+                APPLE
+        );
+
+        Integer userId = getUserId(userInfo);
+
+        return getTokenResponse(userId);
+  }
+  
+  public TokenResponse tokenRefresh(String refreshToken) {
 
         isRefreshToken(refreshToken);
 
