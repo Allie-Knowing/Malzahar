@@ -168,7 +168,7 @@ public class AuthService {
         EssentialUserInfo userInfo = new EssentialUserInfo(
                 email,
                 null,
-                idTokenRequest.getName() == null ? email : idTokenRequest.getName(),
+                idTokenRequest.getName() == null ? email.split("@")[0] : idTokenRequest.getName(),
                 APPLE
         );
 
