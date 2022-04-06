@@ -47,6 +47,13 @@ public class AuthController {
             default:
                 throw new UnsupportedProviderException("[ " + provider + " ] 는 지원하지 않는 provider 입니다~!");
         }
+
+    }
+
+    @PostMapping("/refresh")
+    @ResponseStatus(HttpStatus.CREATED)
+    public TokenResponse tokenRefresh(@RequestHeader("Refresh-Token") String refreshToken) {
+        return authService.tokenRefresh(refreshToken);
     }
 
 

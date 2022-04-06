@@ -6,8 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foreveryone.knowing.dto.request.CodeRequest;
 import com.foreveryone.knowing.dto.request.IdTokenRequest;
 import com.foreveryone.knowing.dto.response.TokenResponse;
+import com.foreveryone.knowing.entity.RefreshToken;
 import com.foreveryone.knowing.entity.User;
 import com.foreveryone.knowing.oauth.AppleJwtUtils;
+import com.foreveryone.knowing.error.exceptions.InvalidRefreshTokenException;
+import com.foreveryone.knowing.repository.RefreshTokenRepository;
 import com.foreveryone.knowing.repository.UserRepository;
 import com.foreveryone.knowing.oauth.OauthRequestDtoBuilder;
 import com.foreveryone.knowing.oauth.client.facebook.FacebookAuthClient;
@@ -19,6 +22,7 @@ import com.foreveryone.knowing.oauth.dto.response.facebook.FacebookAuthResponse;
 import com.foreveryone.knowing.oauth.dto.response.facebook.FacebookUserInfoResponse;
 import com.foreveryone.knowing.oauth.dto.response.kakao.KakaoAuthResponse;
 import com.foreveryone.knowing.oauth.dto.response.kakao.KakaoUserInfoResponse;
+import com.foreveryone.knowing.security.JwtConfigurationProperties;
 import com.foreveryone.knowing.security.JwtTokenProvider;
 import com.foreveryone.knowing.oauth.client.google.GoogleUserInfoClient;
 import com.foreveryone.knowing.oauth.client.naver.NaverAuthClient;
@@ -46,6 +50,7 @@ import static com.foreveryone.knowing.oauth.OauthProvider.*;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     private final GoogleUserInfoClient googleUserInfoClient;
     private final NaverAuthClient naverAuthClient;
@@ -58,6 +63,7 @@ public class AuthService {
     private final OauthRequestDtoBuilder oauthDtoBuilder;
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final JwtConfigurationProperties jwtConfigurationProperties;
 
     private final AppleJwtUtils appleJwtUtils;
 
@@ -160,7 +166,7 @@ public class AuthService {
         return getTokenResponse(userId);
     }
 
-    public TokenResponse appleLogin(IdTokenRequest idTokenRequest) throws JsonProcessingException, NoSuchAlgorithmException, InvalidKeySpecException {
+  public TokenResponse appleLogin(IdTokenRequest idTokenRequest) throws JsonProcessingException, NoSuchAlgorithmException, InvalidKeySpecException {
 
         Claims claims = appleJwtUtils.getClaimsBy(idTokenRequest.getIdToken());
 
@@ -175,6 +181,32 @@ public class AuthService {
         Integer userId = getUserId(userInfo);
 
         return getTokenResponse(userId);
+  }
+  
+  public TokenResponse tokenRefresh(String refreshToken) {
+
+        isRefreshToken(refreshToken);
+
+        doesTokenExist(refreshToken);
+
+        Integer id = jwtTokenProvider.getId(refreshToken);
+
+        return getTokenResponse(id);
+    }
+
+    private void doesTokenExist(String refreshToken) {
+        Optional<RefreshToken> optionalRefreshToken = refreshTokenRepository.findByRefreshToken(refreshToken);
+
+        if(optionalRefreshToken.isEmpty())
+            throw new InvalidRefreshTokenException("저장된 리프레시 토큰 없음");
+
+        refreshTokenRepository.delete(optionalRefreshToken.get());
+    }
+
+    private void isRefreshToken(String refreshToken) {
+
+        if(!jwtTokenProvider.isRefreshToken(refreshToken))
+            throw new InvalidRefreshTokenException("리프레시 토큰이 아닙니다.");
     }
 
 
@@ -212,9 +244,14 @@ public class AuthService {
 
     private TokenResponse getTokenResponse(Integer userId) {
         String accessToken = jwtTokenProvider.generateAccessToken(userId);
-        String refreshToken = jwtTokenProvider.generateRefreshToken(userId);
 
-        return new TokenResponse(accessToken, refreshToken);
+        RefreshToken refreshToken = refreshTokenRepository.save(RefreshToken.builder()
+                .refreshToken(jwtTokenProvider.generateRefreshToken(userId))
+                .exp(jwtConfigurationProperties.getExp().getRefresh())
+                .build()
+        );
+
+        return new TokenResponse(accessToken, refreshToken.getRefreshToken());
     }
 
 }

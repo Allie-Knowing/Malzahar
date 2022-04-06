@@ -48,6 +48,9 @@ dependencies {
 	implementation 'org.mockito:mockito-junit-jupiter:4.3.1'
 	testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.3.1'
 
+	//redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 	//test
 	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitVersion
 	testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitVersion
