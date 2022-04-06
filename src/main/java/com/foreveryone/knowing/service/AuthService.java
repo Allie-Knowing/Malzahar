@@ -167,8 +167,8 @@ public class AuthService {
         String email = claims.get("email", String.class);
         EssentialUserInfo userInfo = new EssentialUserInfo(
                 email,
-                "picture",
-                idTokenRequest.getName(),
+                " ",
+                idTokenRequest.getName() == null ? email : idTokenRequest.getName(),
                 APPLE
         );
 
