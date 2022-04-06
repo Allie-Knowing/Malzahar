@@ -26,7 +26,7 @@ public class User {
     @Column(length = 10, nullable = false)
     private OauthProvider provider;
 
-    @Column(length = 2000, nullable = false)
+    @Column(length = 2000)
     private String profile;
 
     @Column(length = 30, nullable = false)
