@@ -11,6 +11,9 @@ spring:
     database: mysql
     hibernate:
       ddl-auto: none
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
 
 auth:
   jwt:
@@ -23,7 +26,6 @@ oauth:
   google:
     client_id: ${GOOGLE_CLIENT_ID}
     client_secret: ${GOOGLE_CLIENT_SECRET}
-    redirect_uri: ${GOOGLE_REDIRECT_URI}
     auth_url: ${GOOGLE_AUTH_URL}
     userinfo_url: ${GOOGLE_USERINFO_URL}
   naver:
@@ -34,12 +36,12 @@ oauth:
   facebook:
     client_id: ${FACEBOOK_CLIENT_ID}
     client_secret: ${FACEBOOK_CLIENT_SECRET}
-    redirect_uri: ${FACEBOOK_REDIRECT_URI}
     auth_url: ${FACEBOOK_AUTH_URL}
     userinfo_url: ${FACEBOOK_USERINFO_URL}
   kakao:
     client_id: ${KAKAO_CLIENT_ID}
     client_secret: ${KAKAO_CLIENT_SECRET}
-    redirect_uri: ${KAKAO_REDIRECT_URI}
     auth_url: ${KAKAO_AUTH_URL}
     userinfo_url: ${KAKAO_USERINFO_URL}
+  apple:
+    auth_url: https://appleid.apple.com
