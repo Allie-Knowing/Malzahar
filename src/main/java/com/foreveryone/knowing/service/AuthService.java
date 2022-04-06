@@ -1,10 +1,13 @@
 package com.foreveryone.knowing.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foreveryone.knowing.dto.request.CodeRequest;
+import com.foreveryone.knowing.dto.request.IdTokenRequest;
 import com.foreveryone.knowing.dto.response.TokenResponse;
 import com.foreveryone.knowing.entity.User;
+import com.foreveryone.knowing.oauth.AppleJwtUtils;
 import com.foreveryone.knowing.repository.UserRepository;
 import com.foreveryone.knowing.oauth.OauthRequestDtoBuilder;
 import com.foreveryone.knowing.oauth.client.facebook.FacebookAuthClient;
@@ -17,20 +20,21 @@ import com.foreveryone.knowing.oauth.dto.response.facebook.FacebookUserInfoRespo
 import com.foreveryone.knowing.oauth.dto.response.kakao.KakaoAuthResponse;
 import com.foreveryone.knowing.oauth.dto.response.kakao.KakaoUserInfoResponse;
 import com.foreveryone.knowing.security.JwtTokenProvider;
-import com.foreveryone.knowing.oauth.client.google.GoogleAuthClient;
 import com.foreveryone.knowing.oauth.client.google.GoogleUserInfoClient;
 import com.foreveryone.knowing.oauth.client.naver.NaverAuthClient;
 import com.foreveryone.knowing.oauth.client.naver.NaverUserInfoClient;
 import com.foreveryone.knowing.oauth.dto.EssentialUserInfo;
-import com.foreveryone.knowing.oauth.dto.response.google.GoogleAuthResponse;
 import com.foreveryone.knowing.oauth.dto.response.google.GoogleUserInfoResponse;
 import com.foreveryone.knowing.oauth.dto.response.naver.NaverAuthResponse;
 import com.foreveryone.knowing.oauth.dto.response.naver.NaverUserInfoResponse;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.Timestamp;
 import java.util.Map;
 import java.util.Optional;
@@ -43,7 +47,6 @@ public class AuthService {
 
     private final UserRepository userRepository;
 
-    private final GoogleAuthClient googleAuthClient;
     private final GoogleUserInfoClient googleUserInfoClient;
     private final NaverAuthClient naverAuthClient;
     private final NaverUserInfoClient naverUserInfoClient;
@@ -55,6 +58,8 @@ public class AuthService {
     private final OauthRequestDtoBuilder oauthDtoBuilder;
 
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final AppleJwtUtils appleJwtUtils;
 
 
     public TokenResponse googleLogin(String idToken) {
@@ -148,6 +153,23 @@ public class AuthService {
                 kakaoUserInfo.getKakaoAccount().getProfile().getThumbnailImageUrl(),
                 kakaoUserInfo.getKakaoAccount().getProfile().getNickname(),
                 KAKAO
+        );
+
+        Integer userId = getUserId(userInfo);
+
+        return getTokenResponse(userId);
+    }
+
+    public TokenResponse appleLogin(IdTokenRequest idTokenRequest) throws JsonProcessingException, NoSuchAlgorithmException, InvalidKeySpecException {
+
+        Claims claims = appleJwtUtils.getClaimsBy(idTokenRequest.getIdToken());
+
+        String email = claims.get("email", String.class);
+        EssentialUserInfo userInfo = new EssentialUserInfo(
+                email,
+                "picture",
+                idTokenRequest.getName(),
+                APPLE
         );
 
         Integer userId = getUserId(userInfo);

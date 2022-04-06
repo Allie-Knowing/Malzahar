@@ -1,5 +1,6 @@
 package com.foreveryone.knowing.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.foreveryone.knowing.dto.request.CodeRequest;
 import com.foreveryone.knowing.dto.request.IdTokenRequest;
 import com.foreveryone.knowing.dto.response.TokenResponse;
@@ -11,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,8 +23,14 @@ public class AuthController {
 
     @PostMapping("/google")
     @ResponseStatus(HttpStatus.CREATED)
-    public TokenResponse login(@Valid @RequestBody IdTokenRequest idTokenRequest) {
+    public TokenResponse googleLogin(@Valid @RequestBody IdTokenRequest idTokenRequest) {
         return authService.googleLogin(idTokenRequest.getIdToken());
+    }
+
+    @PostMapping("/apple")
+    @ResponseStatus(HttpStatus.CREATED)
+    public TokenResponse appleLogin(@Valid @RequestBody IdTokenRequest idTokenRequest) throws JsonProcessingException, NoSuchAlgorithmException, InvalidKeySpecException {
+        return authService.appleLogin(idTokenRequest);
     }
 
 
