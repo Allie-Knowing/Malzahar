@@ -32,7 +32,6 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = ErrorCode.ACCESS_DENIED;
         String errorDescription = "접근 거부";
         ErrorResponse res = ErrorResponse.of(errorCode, errorDescription);
-        e.printStackTrace();
 
         return new ResponseEntity<>(res, HttpStatus.valueOf(errorCode.getStatus()));
     }
@@ -40,9 +39,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
         ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
-        String errorDescription = "서버 오류";
+        String errorDescription = e.getMessage();
         ErrorResponse res = ErrorResponse.of(errorCode, errorDescription);
-        e.printStackTrace();
 
         return new ResponseEntity<>(res, HttpStatus.valueOf(errorCode.getStatus()));
     }
