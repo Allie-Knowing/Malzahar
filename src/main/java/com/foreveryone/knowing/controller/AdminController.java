@@ -1,10 +1,10 @@
 package com.foreveryone.knowing.controller;
 
+import com.foreveryone.knowing.dto.request.CommentReportRequest;
 import com.foreveryone.knowing.dto.request.InquiryRequest;
-import com.foreveryone.knowing.dto.request.ReportRequest;
+import com.foreveryone.knowing.dto.request.VideoReportRequest;
 import com.foreveryone.knowing.dto.response.AdminGetResponse.InquiryResponse;
 import com.foreveryone.knowing.dto.response.AdminGetResponse.ReportResponse;
-import com.foreveryone.knowing.error.exceptions.InvalidUserTokenException;
 import com.foreveryone.knowing.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,10 +21,16 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    @PostMapping("/report") @PreAuthorize("isAuthenticated()")
+    @PostMapping("/report/video") @PreAuthorize("isAuthenticated()")
     @ResponseStatus(HttpStatus.CREATED)
-    public void submitReport(@Valid @RequestBody ReportRequest reportRequest) {
-        adminService.submitReport(reportRequest);
+    public void submitVideoReport(@Valid @RequestBody VideoReportRequest videoReportRequest) {
+        adminService.submitVideoReport(videoReportRequest);
+    }
+
+    @PostMapping("/report/comment") @PreAuthorize("isAuthenticated()")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void submitCommentReport(@Valid @RequestBody CommentReportRequest commentReportRequest) {
+        adminService.submitCommentReport(commentReportRequest);
     }
 
     @GetMapping("/report")

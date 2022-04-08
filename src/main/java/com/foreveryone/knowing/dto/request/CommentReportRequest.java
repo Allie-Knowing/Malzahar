@@ -10,9 +10,11 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReportRequest {
+public class CommentReportRequest {
     @NotNull
     private Integer videoId;
+    @NotNull
+    private Integer commentId;
     @NotBlank
     private String description;
 }

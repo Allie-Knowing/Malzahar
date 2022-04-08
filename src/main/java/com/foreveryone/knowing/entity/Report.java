@@ -34,4 +34,8 @@ public class Report {
     @Column(name = "created_at", nullable = false)
     private Timestamp createdAt;
 
+    @ManyToOne
+    @JoinColumn(name = "comment_id")
+    private Comment comment;
+
 }

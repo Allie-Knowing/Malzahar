@@ -2,7 +2,7 @@ package com.foreveryone.knowing.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foreveryone.knowing.dto.request.InquiryRequest;
-import com.foreveryone.knowing.dto.request.ReportRequest;
+import com.foreveryone.knowing.dto.request.VideoReportRequest;
 import com.foreveryone.knowing.entity.User;
 import com.foreveryone.knowing.entity.Video;
 import com.foreveryone.knowing.oauth.OauthProvider;
@@ -19,7 +19,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.sql.Timestamp;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -75,10 +74,10 @@ class AdminControllerTest {
     }
 
     @Test
-    void submitReport() throws Exception {
-        mvc.perform(post("/admin/report")
+    void submitReportVideo() throws Exception {
+        mvc.perform(post("/admin/report/video")
                 .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new ReportRequest(video.getId(), "신고합니다.")))
+                        .content(objectMapper.writeValueAsString(new VideoReportRequest(video.getId(), "신고합니다.")))
                 .header("Authorization", "Bearer " + jwtTokenProvider.generateAccessToken(user.getId())))
                 .andExpect(status().isCreated());
     }
