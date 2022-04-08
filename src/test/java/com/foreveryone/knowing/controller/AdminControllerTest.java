@@ -74,8 +74,8 @@ class AdminControllerTest {
     }
 
     @Test
-    void submitReport() throws Exception {
-        mvc.perform(post("/admin/report")
+    void submitReportVideo() throws Exception {
+        mvc.perform(post("/admin/report/video")
                 .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new VideoReportRequest(video.getId(), "신고합니다.")))
                 .header("Authorization", "Bearer " + jwtTokenProvider.generateAccessToken(user.getId())))
