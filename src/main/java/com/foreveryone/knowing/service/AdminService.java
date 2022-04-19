@@ -1,13 +1,11 @@
 package com.foreveryone.knowing.service;
 
+import com.foreveryone.knowing.dto.request.CommentReportRequest;
 import com.foreveryone.knowing.dto.request.InquiryRequest;
-import com.foreveryone.knowing.dto.request.ReportRequest;
+import com.foreveryone.knowing.dto.request.VideoReportRequest;
 import com.foreveryone.knowing.entity.*;
 import com.foreveryone.knowing.error.exceptions.NotFoundException;
-import com.foreveryone.knowing.repository.InquiryCategoryRepository;
-import com.foreveryone.knowing.repository.InquiryRepository;
-import com.foreveryone.knowing.repository.ReportRepository;
-import com.foreveryone.knowing.repository.VideoRepository;
+import com.foreveryone.knowing.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,15 +24,32 @@ public class AdminService {
     private final InquiryRepository inquiryRepository;
     private final VideoRepository videoRepository;
     private final InquiryCategoryRepository inquiryCategoryRepository;
+    private final CommentRepository commentRepository;
 
-    public void submitReport(ReportRequest reportRequest) {
+    public void submitVideoReport(VideoReportRequest videoReportRequest) {
         Timestamp now = new Timestamp(System.currentTimeMillis());
 
         reportRepository.save(Report.builder()
-                .description(reportRequest.getDescription())
+                .description(videoReportRequest.getDescription())
                 .user(getCurrentUser())
-                .video(videoRepository.findById(reportRequest.getVideoId()).orElseThrow(
+                .video(videoRepository.findById(videoReportRequest.getVideoId()).orElseThrow(
                                 () -> new NotFoundException("video Id Not Found")
+                ))
+                .createdAt(now)
+                .build());
+    }
+
+    public void submitCommentReport(CommentReportRequest commentReportRequest) {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+
+        reportRepository.save(Report.builder()
+                .description(commentReportRequest.getDescription())
+                .user(getCurrentUser())
+                .video(videoRepository.findById(commentReportRequest.getVideoId()).orElseThrow(
+                        () -> new NotFoundException("video Id Not Found")
+                ))
+                .comment(commentRepository.findById(commentReportRequest.getCommentId()).orElseThrow(
+                        () -> new NotFoundException("comment Id Not Found")
                 ))
                 .createdAt(now)
                 .build());
