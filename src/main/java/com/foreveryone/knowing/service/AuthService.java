@@ -10,6 +10,8 @@ import com.foreveryone.knowing.entity.RefreshToken;
 import com.foreveryone.knowing.entity.User;
 import com.foreveryone.knowing.oauth.AppleJwtUtils;
 import com.foreveryone.knowing.error.exceptions.InvalidRefreshTokenException;
+import com.foreveryone.knowing.oauth.client.google.GoogleAuthClient;
+import com.foreveryone.knowing.oauth.dto.response.google.GoogleAuthResponse;
 import com.foreveryone.knowing.repository.RefreshTokenRepository;
 import com.foreveryone.knowing.repository.UserRepository;
 import com.foreveryone.knowing.oauth.OauthRequestDtoBuilder;
@@ -53,6 +55,7 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     private final GoogleUserInfoClient googleUserInfoClient;
+    private final GoogleAuthClient googleAuthClient;
     private final NaverAuthClient naverAuthClient;
     private final NaverUserInfoClient naverUserInfoClient;
     private final FacebookAuthClient facebookAuthClient;
@@ -68,8 +71,14 @@ public class AuthService {
     private final AppleJwtUtils appleJwtUtils;
 
 
-    public TokenResponse googleLogin(String idToken) {
+    public TokenResponse googleLogin(CodeRequest codeRequest) {
+        String code = codeRequest.getCode();
+        String redirectUri = codeRequest.getRedirectUri();
 
+        GoogleAuthRequest googleAuthRequest = oauthDtoBuilder.getGoogle(code, redirectUri);
+
+        GoogleAuthResponse googleAuthResponse = googleAuthClient.googleAuth(googleAuthRequest);
+        String idToken = googleAuthResponse.getIdToken();
         GoogleUserInfoResponse googleUserInfo = googleUserInfoClient.getUserInfo(idToken);
 
         EssentialUserInfo userInfo = new EssentialUserInfo(
