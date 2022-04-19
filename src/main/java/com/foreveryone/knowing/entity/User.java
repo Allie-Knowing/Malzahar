@@ -52,4 +52,8 @@ public class User {
             throw new ProviderDoesNotMatchException("이미 다른 방법으로 가입하셨네요? " + this.provider + " 계정으로 로그인해보세요!");
         }
     }
+
+    public void updateNickname(String nickname) {
+        this.name = nickname;
+    }
 }
