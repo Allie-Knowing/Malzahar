@@ -23,8 +23,8 @@ public class AuthController {
 
     @PostMapping("/google")
     @ResponseStatus(HttpStatus.CREATED)
-    public TokenResponse googleLogin(@Valid @RequestBody CodeRequest codeRequest) {
-        return authService.googleLogin(codeRequest);
+    public TokenResponse googleLogin(@Valid @RequestBody IdTokenRequest idTokenRequest) {
+        return authService.googleLogin(idTokenRequest.getIdToken());
     }
 
     @PostMapping("/apple")

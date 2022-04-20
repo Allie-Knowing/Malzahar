@@ -71,14 +71,8 @@ public class AuthService {
     private final AppleJwtUtils appleJwtUtils;
 
 
-    public TokenResponse googleLogin(CodeRequest codeRequest) {
-        String code = codeRequest.getCode();
-        String redirectUri = codeRequest.getRedirectUri();
+    public TokenResponse googleLogin(String idToken) {
 
-        GoogleAuthRequest googleAuthRequest = oauthDtoBuilder.getGoogle(code, redirectUri);
-
-        GoogleAuthResponse googleAuthResponse = googleAuthClient.googleAuth(googleAuthRequest);
-        String idToken = googleAuthResponse.getIdToken();
         GoogleUserInfoResponse googleUserInfo = googleUserInfoClient.getUserInfo(idToken);
 
         EssentialUserInfo userInfo = new EssentialUserInfo(
