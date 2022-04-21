@@ -20,6 +20,7 @@ public class MyPageController {
     @PutMapping("/nickname")
     @ResponseStatus(HttpStatus.CREATED)
     public void updateNickname(@Valid @RequestBody NicknameRequest nicknameRequest) {
+        System.out.println("닉네임 변경 요청");
         myPageService.updateNickname(nicknameRequest);
     }
 }

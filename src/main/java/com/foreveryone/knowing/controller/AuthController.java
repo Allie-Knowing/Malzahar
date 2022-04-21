@@ -24,12 +24,14 @@ public class AuthController {
     @PostMapping("/google")
     @ResponseStatus(HttpStatus.CREATED)
     public TokenResponse googleLogin(@Valid @RequestBody IdTokenRequest idTokenRequest) {
+        System.out.println("GOOGLE 로그인 요청");
         return authService.googleLogin(idTokenRequest.getIdToken());
     }
 
     @PostMapping("/apple")
     @ResponseStatus(HttpStatus.CREATED)
     public TokenResponse appleLogin(@Valid @RequestBody IdTokenRequest idTokenRequest) throws JsonProcessingException, NoSuchAlgorithmException, InvalidKeySpecException {
+        System.out.println("APPLE 로그인 요청");
         return authService.appleLogin(idTokenRequest);
     }
 
@@ -37,6 +39,7 @@ public class AuthController {
     @PostMapping("/auth")
     @ResponseStatus(HttpStatus.CREATED)
     public TokenResponse login(@Valid @RequestBody CodeRequest codeRequest, @RequestParam OauthProvider provider) {
+        System.out.println(provider + " 로그인 요청");
         switch (provider) {
             case NAVER:
                 return authService.naverLogin(codeRequest);
@@ -53,6 +56,7 @@ public class AuthController {
     @PostMapping("/refresh")
     @ResponseStatus(HttpStatus.CREATED)
     public TokenResponse tokenRefresh(@RequestHeader("Refresh-Token") String refreshToken) {
+        System.out.println("토큰 리프레시 요청");
         return authService.tokenRefresh(refreshToken);
     }
 
