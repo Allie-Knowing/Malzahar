@@ -37,6 +37,8 @@ public class AdminService {
                 ))
                 .createdAt(now)
                 .build());
+
+        System.out.println("비디오 신고 제출");
     }
 
     public void submitCommentReport(CommentReportRequest commentReportRequest) {
@@ -53,15 +55,19 @@ public class AdminService {
                 ))
                 .createdAt(now)
                 .build());
+
+        System.out.println("글답변 신고");
     }
 
     public List<ReportResponse> reportList() {
+        System.out.println("신고 리스트 보기");
         return reportRepository.findAll().stream()
                 .map(ReportResponse::from)
                 .collect(Collectors.toList());
     }
 
     public void deleteVideo(Integer videoId) {
+        System.out.println("비디오 삭제");
         videoRepository.deleteById(videoId);
     }
 
@@ -80,9 +86,11 @@ public class AdminService {
                 .createdAt(now)
                 .build());
 
+        System.out.println("문의");
     }
 
     public List<InquiryResponse> inquiryList() {
+        System.out.println("문의 리스트");
         return inquiryRepository.findAllByOrderByInquiryCategoryCategory().stream()
                 .map(InquiryResponse::from)
                 .collect(Collectors.toList());

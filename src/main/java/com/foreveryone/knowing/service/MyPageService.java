@@ -20,5 +20,7 @@ public class MyPageService {
         User user = userRepository.findById(authFacade.getCurrentUserId()).orElseThrow();
 
         user.updateNickname(nicknameRequest.getNickname());
+
+        System.out.println("닉네임 수정");
     }
 }

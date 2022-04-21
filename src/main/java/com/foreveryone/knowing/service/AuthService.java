@@ -84,6 +84,8 @@ public class AuthService {
 
         Integer userId = getUserId(userInfo);
 
+        System.out.println("GOOGLE 로그인 성공");
+
         return getTokenResponse(userId);
     }
 
@@ -106,6 +108,8 @@ public class AuthService {
         );
 
         Integer userId = getUserId(userInfo);
+
+        System.out.println("NAVER 로그인 성공");
 
         return getTokenResponse(userId);
     }
@@ -134,6 +138,8 @@ public class AuthService {
         );
 
         Integer userId = getUserId(userInfo);
+
+        System.out.println("FACEBOOK 로그인 성공");
 
         return getTokenResponse(userId);
     }
@@ -166,10 +172,12 @@ public class AuthService {
 
         Integer userId = getUserId(userInfo);
 
+        System.out.println("KAKAO 로그인 성공");
+
         return getTokenResponse(userId);
     }
 
-  public TokenResponse appleLogin(IdTokenRequest idTokenRequest) throws JsonProcessingException, NoSuchAlgorithmException, InvalidKeySpecException {
+    public TokenResponse appleLogin(IdTokenRequest idTokenRequest) throws JsonProcessingException, NoSuchAlgorithmException, InvalidKeySpecException {
 
         Claims claims = appleJwtUtils.getClaimsBy(idTokenRequest.getIdToken());
 
@@ -183,16 +191,20 @@ public class AuthService {
 
         Integer userId = getUserId(userInfo);
 
+      System.out.println("APPLE 로그인 성공");
+
         return getTokenResponse(userId);
-  }
+    }
   
-  public TokenResponse tokenRefresh(String refreshToken) {
+    public TokenResponse tokenRefresh(String refreshToken) {
 
         isRefreshToken(refreshToken);
 
         doesTokenExist(refreshToken);
 
         Integer id = jwtTokenProvider.getId(refreshToken);
+
+        System.out.println("토큰 리프레시 성공");
 
         return getTokenResponse(id);
     }
@@ -207,7 +219,6 @@ public class AuthService {
     }
 
     private void isRefreshToken(String refreshToken) {
-
         if(!jwtTokenProvider.isRefreshToken(refreshToken))
             throw new InvalidRefreshTokenException("리프레시 토큰이 아닙니다.");
     }
