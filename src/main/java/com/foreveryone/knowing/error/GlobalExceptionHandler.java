@@ -16,6 +16,8 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = e.getErrorCode();
         ErrorResponse res = ErrorResponse.of(errorCode, errorDescription);
 
+        System.out.println("error message = " + e.getMessage());
+
         return new ResponseEntity<>(res, HttpStatus.valueOf(errorCode.getStatus()));
     }
 
@@ -23,6 +25,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleFeignException(FeignException e) {
         String errorDescription = e.getMessage();
         ErrorResponse res = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR, errorDescription);
+
+        e.printStackTrace();
 
         return new ResponseEntity<>(res, HttpStatus.valueOf(e.status()));
     }
@@ -33,6 +37,8 @@ public class GlobalExceptionHandler {
         String errorDescription = "접근 거부";
         ErrorResponse res = ErrorResponse.of(errorCode, errorDescription);
 
+        System.out.println(errorDescription);
+
         return new ResponseEntity<>(res, HttpStatus.valueOf(errorCode.getStatus()));
     }
 
@@ -41,6 +47,8 @@ public class GlobalExceptionHandler {
         ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
         String errorDescription = e.getMessage();
         ErrorResponse res = ErrorResponse.of(errorCode, errorDescription);
+
+        e.printStackTrace();
 
         return new ResponseEntity<>(res, HttpStatus.valueOf(errorCode.getStatus()));
     }
