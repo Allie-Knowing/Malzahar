@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foreveryone.knowing.dto.request.CodeRequest;
+import com.foreveryone.knowing.dto.request.GoogleLoginRequest;
 import com.foreveryone.knowing.dto.request.IdTokenRequest;
 import com.foreveryone.knowing.dto.response.TokenResponse;
 import com.foreveryone.knowing.entity.RefreshToken;
@@ -71,16 +72,14 @@ public class AuthService {
     private final AppleJwtUtils appleJwtUtils;
 
 
-    public TokenResponse googleLogin(String idToken) {
+    public TokenResponse googleLogin(GoogleLoginRequest googleLoginRequest) {
 
-        GoogleUserInfoResponse googleUserInfo = googleUserInfoClient.getUserInfo(idToken);
-
-        EssentialUserInfo userInfo = new EssentialUserInfo(
-                googleUserInfo.getEmail(),
-                googleUserInfo.getPicture(),
-                googleUserInfo.getName(),
-                GOOGLE
-        );
+        EssentialUserInfo userInfo = EssentialUserInfo.builder()
+                .email(googleLoginRequest.getEmail())
+                .picture(googleLoginRequest.getPicture())
+                .name(googleLoginRequest.getName())
+                .provider(GOOGLE)
+                .build();
 
         Integer userId = getUserId(userInfo);
 
@@ -100,12 +99,12 @@ public class AuthService {
         NaverUserInfoResponse userInfoResponse = naverUserInfoClient.naverUserInfo("Bearer " + accessToken);
         NaverUserInfoResponse.Response response = userInfoResponse.getResponse();
 
-        EssentialUserInfo userInfo = new EssentialUserInfo(
-                response.getEmail(),
-                response.getProfileImage(),
-                response.getName(),
-                NAVER
-        );
+        EssentialUserInfo userInfo = EssentialUserInfo.builder()
+                .email(response.getEmail())
+                .picture(response.getProfileImage())
+                .name(response.getName())
+                .provider(NAVER)
+                .build();
 
         Integer userId = getUserId(userInfo);
 
@@ -182,12 +181,11 @@ public class AuthService {
         Claims claims = appleJwtUtils.getClaimsBy(idTokenRequest.getIdToken());
 
         String email = claims.get("email", String.class);
-        EssentialUserInfo userInfo = new EssentialUserInfo(
-                email,
-                null,
-                idTokenRequest.getName() == null ? email.split("@")[0] : idTokenRequest.getName(),
-                APPLE
-        );
+        EssentialUserInfo userInfo = EssentialUserInfo.builder()
+                .email(email)
+                .name(idTokenRequest.getName() == null ? email.split("@")[0] : idTokenRequest.getName())
+                .provider(APPLE)
+                .build();
 
         Integer userId = getUserId(userInfo);
 

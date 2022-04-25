@@ -2,6 +2,7 @@ package com.foreveryone.knowing.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.foreveryone.knowing.dto.request.CodeRequest;
+import com.foreveryone.knowing.dto.request.GoogleLoginRequest;
 import com.foreveryone.knowing.dto.request.IdTokenRequest;
 import com.foreveryone.knowing.dto.response.TokenResponse;
 import com.foreveryone.knowing.error.exceptions.UnsupportedProviderException;
@@ -23,9 +24,9 @@ public class AuthController {
 
     @PostMapping("/google")
     @ResponseStatus(HttpStatus.CREATED)
-    public TokenResponse googleLogin(@Valid @RequestBody IdTokenRequest idTokenRequest) {
+    public TokenResponse googleLogin(@Valid @RequestBody GoogleLoginRequest googleLoginRequest) {
         System.out.println("GOOGLE 로그인 요청");
-        return authService.googleLogin(idTokenRequest.getIdToken());
+        return authService.googleLogin(googleLoginRequest);
     }
 
     @PostMapping("/apple")
