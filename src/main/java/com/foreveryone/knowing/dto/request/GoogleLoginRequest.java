@@ -12,6 +12,6 @@ public class GoogleLoginRequest {
     private String email;
     @NotEmpty
     private String name;
-    @NotEmpty
+
     private String picture;
 }
