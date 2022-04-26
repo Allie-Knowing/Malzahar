@@ -9,6 +9,7 @@ public enum ErrorCode {
     UNSUPPORTED_PROVIDER(400, "Unsupported provider."),
     INVALID_USER_TOKEN(401, "Invalid user token."),
     INVALID_REFRESH_TOKEN(401, "Invalid refresh token."),
+    INVALID_ID_TOKEN(401, "Invalid ID token."),
     ACCESS_DENIED(403, "Access denied."),
     NOT_FOUND(404, "Not found."),
     PROVIDER_DOES_NOT_MATCH(409, "Provider does not match."),

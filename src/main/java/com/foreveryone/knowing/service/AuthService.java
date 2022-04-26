@@ -9,6 +9,7 @@ import com.foreveryone.knowing.dto.request.IdTokenRequest;
 import com.foreveryone.knowing.dto.response.TokenResponse;
 import com.foreveryone.knowing.entity.RefreshToken;
 import com.foreveryone.knowing.entity.User;
+import com.foreveryone.knowing.error.exceptions.InvalidIdTokenException;
 import com.foreveryone.knowing.oauth.AppleJwtUtils;
 import com.foreveryone.knowing.error.exceptions.InvalidRefreshTokenException;
 import com.foreveryone.knowing.oauth.client.google.GoogleAuthClient;
@@ -181,6 +182,9 @@ public class AuthService {
         Claims claims = appleJwtUtils.getClaimsBy(idTokenRequest.getIdToken());
 
         String email = claims.get("email", String.class);
+        if (email == null ) {
+            throw new InvalidIdTokenException("잘못된 ID token 입니다.");
+        }
         EssentialUserInfo userInfo = EssentialUserInfo.builder()
                 .email(email)
                 .name(idTokenRequest.getName() == null ? email.split("@")[0] : idTokenRequest.getName())
@@ -189,7 +193,7 @@ public class AuthService {
 
         Integer userId = getUserId(userInfo);
 
-      System.out.println("APPLE 로그인 성공");
+        System.out.println("APPLE 로그인 성공");
 
         return getTokenResponse(userId);
     }
