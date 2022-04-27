@@ -1,8 +1,7 @@
 package com.foreveryone.knowing.entity.actionpoint;
 
 import com.foreveryone.knowing.entity.auth.User;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -10,7 +9,9 @@ import java.sql.Timestamp;
 @Table(name = "action_point")
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ActionPoint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
