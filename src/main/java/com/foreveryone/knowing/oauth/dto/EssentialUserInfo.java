@@ -1,6 +1,6 @@
 package com.foreveryone.knowing.oauth.dto;
 
-import com.foreveryone.knowing.oauth.OauthProvider;
+import com.foreveryone.knowing.oauth.utils.OauthProvider;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

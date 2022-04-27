@@ -1,30 +1,24 @@
 package com.foreveryone.knowing.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.foreveryone.knowing.dto.request.CodeRequest;
-import com.foreveryone.knowing.dto.request.IdTokenRequest;
 import com.foreveryone.knowing.mocks.FacebookMocks;
 import com.foreveryone.knowing.mocks.GoogleMocks;
 import com.foreveryone.knowing.WireMockConfig;
-import com.foreveryone.knowing.repository.UserRepository;
+import com.foreveryone.knowing.repository.auth.UserRepository;
 import com.foreveryone.knowing.mocks.KakaoMocks;
 import com.foreveryone.knowing.mocks.NaverMocks;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.io.IOException;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc

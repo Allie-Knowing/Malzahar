@@ -3,20 +3,21 @@ package com.foreveryone.knowing.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.foreveryone.knowing.dto.request.CodeRequest;
-import com.foreveryone.knowing.dto.request.GoogleLoginRequest;
-import com.foreveryone.knowing.dto.request.IdTokenRequest;
-import com.foreveryone.knowing.dto.response.TokenResponse;
-import com.foreveryone.knowing.entity.RefreshToken;
-import com.foreveryone.knowing.entity.User;
-import com.foreveryone.knowing.error.exceptions.InvalidIdTokenException;
-import com.foreveryone.knowing.oauth.AppleJwtUtils;
-import com.foreveryone.knowing.error.exceptions.InvalidRefreshTokenException;
+import com.foreveryone.knowing.dto.request.auth.CodeRequest;
+import com.foreveryone.knowing.dto.request.auth.GoogleLoginRequest;
+import com.foreveryone.knowing.dto.request.auth.IdTokenRequest;
+import com.foreveryone.knowing.dto.response.auth.TokenResponse;
+import com.foreveryone.knowing.entity.Iq;
+import com.foreveryone.knowing.entity.auth.redis.RefreshToken;
+import com.foreveryone.knowing.entity.auth.User;
+import com.foreveryone.knowing.error.exceptions.auth.InvalidIdTokenException;
+import com.foreveryone.knowing.oauth.utils.AppleJwtUtils;
+import com.foreveryone.knowing.error.exceptions.auth.InvalidRefreshTokenException;
 import com.foreveryone.knowing.oauth.client.google.GoogleAuthClient;
-import com.foreveryone.knowing.oauth.dto.response.google.GoogleAuthResponse;
-import com.foreveryone.knowing.repository.RefreshTokenRepository;
-import com.foreveryone.knowing.repository.UserRepository;
-import com.foreveryone.knowing.oauth.OauthRequestDtoBuilder;
+import com.foreveryone.knowing.repository.IqRepository;
+import com.foreveryone.knowing.repository.auth.redis.RefreshTokenRepository;
+import com.foreveryone.knowing.repository.auth.UserRepository;
+import com.foreveryone.knowing.oauth.utils.OauthRequestDtoBuilder;
 import com.foreveryone.knowing.oauth.client.facebook.FacebookAuthClient;
 import com.foreveryone.knowing.oauth.client.facebook.FacebookUserInfoClient;
 import com.foreveryone.knowing.oauth.client.kakao.KakaoAuthClient;
@@ -32,28 +33,30 @@ import com.foreveryone.knowing.oauth.client.google.GoogleUserInfoClient;
 import com.foreveryone.knowing.oauth.client.naver.NaverAuthClient;
 import com.foreveryone.knowing.oauth.client.naver.NaverUserInfoClient;
 import com.foreveryone.knowing.oauth.dto.EssentialUserInfo;
-import com.foreveryone.knowing.oauth.dto.response.google.GoogleUserInfoResponse;
 import com.foreveryone.knowing.oauth.dto.response.naver.NaverAuthResponse;
 import com.foreveryone.knowing.oauth.dto.response.naver.NaverUserInfoResponse;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.Timestamp;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.foreveryone.knowing.oauth.OauthProvider.*;
+import static com.foreveryone.knowing.oauth.utils.OauthProvider.*;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final IqRepository iqRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
     private final GoogleUserInfoClient googleUserInfoClient;
@@ -82,11 +85,9 @@ public class AuthService {
                 .provider(GOOGLE)
                 .build();
 
-        Integer userId = getUserId(userInfo);
-
         System.out.println("GOOGLE 로그인 성공");
 
-        return getTokenResponse(userId);
+        return getUserAndReturnToken(userInfo);
     }
 
 
@@ -107,11 +108,9 @@ public class AuthService {
                 .provider(NAVER)
                 .build();
 
-        Integer userId = getUserId(userInfo);
-
         System.out.println("NAVER 로그인 성공");
 
-        return getTokenResponse(userId);
+        return getUserAndReturnToken(userInfo);
     }
 
 
@@ -137,11 +136,9 @@ public class AuthService {
                 FACEBOOK
         );
 
-        Integer userId = getUserId(userInfo);
-
         System.out.println("FACEBOOK 로그인 성공");
 
-        return getTokenResponse(userId);
+        return getUserAndReturnToken(userInfo);
     }
 
     public TokenResponse kakaoLogin(CodeRequest codeRequest) {
@@ -170,11 +167,9 @@ public class AuthService {
                 KAKAO
         );
 
-        Integer userId = getUserId(userInfo);
-
         System.out.println("KAKAO 로그인 성공");
 
-        return getTokenResponse(userId);
+        return getUserAndReturnToken(userInfo);
     }
 
     public TokenResponse appleLogin(IdTokenRequest idTokenRequest) throws JsonProcessingException, NoSuchAlgorithmException, InvalidKeySpecException {
@@ -191,11 +186,9 @@ public class AuthService {
                 .provider(APPLE)
                 .build();
 
-        Integer userId = getUserId(userInfo);
-
         System.out.println("APPLE 로그인 성공");
 
-        return getTokenResponse(userId);
+        return getUserAndReturnToken(userInfo);
     }
   
     public TokenResponse tokenRefresh(String refreshToken) {
@@ -208,7 +201,7 @@ public class AuthService {
 
         System.out.println("토큰 리프레시 성공");
 
-        return getTokenResponse(id);
+        return getTokenResponse(id, null);
     }
 
     private void doesTokenExist(String refreshToken) {
@@ -226,27 +219,29 @@ public class AuthService {
     }
 
 
-    private Integer getUserId(EssentialUserInfo userInfo) {
+    private TokenResponse getUserAndReturnToken(EssentialUserInfo userInfo) {
 
         String email = userInfo.getEmail();
 
         Optional<User> optionalUser = userRepository.findByEmail(email);
         User user;
 
-        if (optionalUser.isEmpty()) {
+        Boolean isFirstLogin = optionalUser.isEmpty();
+
+        if (isFirstLogin) {
             user = saveUser(userInfo);
         } else {
             user = optionalUser.get();
             user.checkProvider(userInfo.getProvider());
         }
 
-        return user.getId();
+        return getTokenResponse(user.getId(), isFirstLogin);
     }
 
-
+    @Transactional
     private User saveUser(EssentialUserInfo userInfo) {
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        return userRepository.save(User.builder()
+        User user = userRepository.save(User.builder()
                 .email(userInfo.getEmail())
                 .profile(userInfo.getPicture())
                 .name(userInfo.getName())
@@ -255,10 +250,17 @@ public class AuthService {
                 .updatedAt(now)
                 .lastAccessedAt(now)
                 .build());
+
+        iqRepository.save(Iq.builder()
+                .user(user)
+                .curCnt(BigInteger.valueOf(0))
+                .totCnt(BigInteger.valueOf(0))
+                .build());
+        return user;
     }
 
 
-    private TokenResponse getTokenResponse(Integer userId) {
+    private TokenResponse getTokenResponse(Integer userId, Boolean isFirstLogin) {
         String accessToken = jwtTokenProvider.generateAccessToken(userId);
 
         RefreshToken refreshToken = refreshTokenRepository.save(RefreshToken.builder()
@@ -267,7 +269,11 @@ public class AuthService {
                 .build()
         );
 
-        return new TokenResponse(accessToken, refreshToken.getRefreshToken());
+        return TokenResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken.getRefreshToken())
+                .isFirstLogin(isFirstLogin)
+                .build();
     }
 
 }

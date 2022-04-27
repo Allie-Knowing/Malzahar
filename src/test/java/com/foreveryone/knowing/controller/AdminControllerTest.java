@@ -1,12 +1,20 @@
 package com.foreveryone.knowing.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.foreveryone.knowing.dto.request.InquiryRequest;
-import com.foreveryone.knowing.dto.request.VideoReportRequest;
-import com.foreveryone.knowing.entity.User;
-import com.foreveryone.knowing.entity.Video;
-import com.foreveryone.knowing.oauth.OauthProvider;
-import com.foreveryone.knowing.repository.*;
+import com.foreveryone.knowing.dto.request.admin.InquiryRequest;
+import com.foreveryone.knowing.dto.request.admin.VideoReportRequest;
+import com.foreveryone.knowing.entity.actionpoint.ActionPointCategory;
+import com.foreveryone.knowing.entity.admin.Report;
+import com.foreveryone.knowing.entity.auth.User;
+import com.foreveryone.knowing.entity.admin.answer.Video;
+import com.foreveryone.knowing.oauth.utils.OauthProvider;
+import com.foreveryone.knowing.repository.actionpoint.ActionPointCategoryRepository;
+import com.foreveryone.knowing.repository.actionpoint.ActionPointRepository;
+import com.foreveryone.knowing.repository.admin.inquiry.InquiryCategoryRepository;
+import com.foreveryone.knowing.repository.admin.inquiry.InquiryRepository;
+import com.foreveryone.knowing.repository.admin.ReportRepository;
+import com.foreveryone.knowing.repository.admin.answer.VideoRepository;
+import com.foreveryone.knowing.repository.auth.UserRepository;
 import com.foreveryone.knowing.security.JwtTokenProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +46,10 @@ class AdminControllerTest {
     @Autowired
     InquiryRepository inquiryRepository;
     @Autowired
+    ActionPointRepository actionPointRepository;
+    @Autowired
+    ActionPointCategoryRepository actionPointCategoryRepository;
+    @Autowired
     InquiryCategoryRepository inquiryCategoryRepository;
     @Autowired
     JwtTokenProvider jwtTokenProvider;
@@ -46,6 +58,7 @@ class AdminControllerTest {
 
     User user;
     Video video;
+    Report report;
 
     @BeforeEach
     void setUp() {
@@ -63,6 +76,22 @@ class AdminControllerTest {
         video = videoRepository.save(Video.builder()
                 .user(user)
                 .build());
+        report = reportRepository.save(Report.builder()
+                .description("스팸")
+                .user(user)
+                .video(video)
+                .createdAt(now)
+                .build());
+        actionPointCategoryRepository.save(ActionPointCategory.builder()
+                .id(8)
+                .name("신고 승인")
+                .score(7)
+                .build());
+        actionPointCategoryRepository.save(ActionPointCategory.builder()
+                .id(10)
+                .name("영상이 신고 당함")
+                .score(-30)
+                .build());
     }
 
     @AfterEach
@@ -70,6 +99,8 @@ class AdminControllerTest {
         inquiryCategoryRepository.deleteAll();
         reportRepository.deleteAll();
         videoRepository.deleteAll();
+        actionPointRepository.deleteAll();
+        actionPointCategoryRepository.deleteAll();
         userRepository.deleteAll();
     }
 
@@ -90,7 +121,8 @@ class AdminControllerTest {
 
     @Test
     void deleteVideo() throws Exception {
-        mvc.perform(delete("/admin/video/" + video.getId()))
+        mvc.perform(delete("/admin/video/" + video.getId())
+                .param("reportId", report.getId().toString()))
                 .andExpect(status().isNoContent());
     }
 
