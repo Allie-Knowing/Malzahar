@@ -43,9 +43,9 @@ public class AdminController {
 
     @DeleteMapping("/video/{videoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteVideo(@PathVariable Integer videoId) {
+    public void deleteVideo(@PathVariable Integer videoId, @RequestParam Integer reportId) {
         System.out.println("영상 삭제 요청");
-        adminService.deleteVideo(videoId);
+        adminService.deleteVideo(videoId, reportId);
     }
 
     @PostMapping("/inquiry") @PreAuthorize("isAuthenticated()")
