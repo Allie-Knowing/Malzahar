@@ -93,7 +93,7 @@ public class AdminService {
         saveActionPoint(reportApproveCategoryId, report.getUser());
         saveActionPoint(reportedCategoryId, video.getUser());
 
-        videoRepository.deleteById(videoId);
+        video.softDelete();
     }
 
     public void inquiry(InquiryRequest inquiryRequest) {

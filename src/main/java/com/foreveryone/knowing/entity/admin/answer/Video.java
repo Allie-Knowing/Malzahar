@@ -4,6 +4,7 @@ import com.foreveryone.knowing.entity.auth.User;
 import lombok.*;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Table(name = "video")
 @Entity
@@ -17,8 +18,14 @@ public class Video {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.REMOVE, optional = false)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(name = "deleted_at")
+    private Timestamp deletedAt;
+
+    public void softDelete() {
+        this.deletedAt = new Timestamp(System.currentTimeMillis());
+    }
 }
