@@ -85,11 +85,9 @@ public class AuthService {
                 .provider(GOOGLE)
                 .build();
 
-        Integer userId = getUserId(userInfo);
-
         System.out.println("GOOGLE 로그인 성공");
 
-        return getTokenResponse(userId);
+        return getUserAndReturnToken(userInfo);
     }
 
 
@@ -110,11 +108,9 @@ public class AuthService {
                 .provider(NAVER)
                 .build();
 
-        Integer userId = getUserId(userInfo);
-
         System.out.println("NAVER 로그인 성공");
 
-        return getTokenResponse(userId);
+        return getUserAndReturnToken(userInfo);
     }
 
 
@@ -140,11 +136,9 @@ public class AuthService {
                 FACEBOOK
         );
 
-        Integer userId = getUserId(userInfo);
-
         System.out.println("FACEBOOK 로그인 성공");
 
-        return getTokenResponse(userId);
+        return getUserAndReturnToken(userInfo);
     }
 
     public TokenResponse kakaoLogin(CodeRequest codeRequest) {
@@ -173,11 +167,9 @@ public class AuthService {
                 KAKAO
         );
 
-        Integer userId = getUserId(userInfo);
-
         System.out.println("KAKAO 로그인 성공");
 
-        return getTokenResponse(userId);
+        return getUserAndReturnToken(userInfo);
     }
 
     public TokenResponse appleLogin(IdTokenRequest idTokenRequest) throws JsonProcessingException, NoSuchAlgorithmException, InvalidKeySpecException {
@@ -194,11 +186,9 @@ public class AuthService {
                 .provider(APPLE)
                 .build();
 
-        Integer userId = getUserId(userInfo);
-
         System.out.println("APPLE 로그인 성공");
 
-        return getTokenResponse(userId);
+        return getUserAndReturnToken(userInfo);
     }
   
     public TokenResponse tokenRefresh(String refreshToken) {
@@ -211,7 +201,7 @@ public class AuthService {
 
         System.out.println("토큰 리프레시 성공");
 
-        return getTokenResponse(id);
+        return getTokenResponse(id, null);
     }
 
     private void doesTokenExist(String refreshToken) {
@@ -229,21 +219,23 @@ public class AuthService {
     }
 
 
-    private Integer getUserId(EssentialUserInfo userInfo) {
+    private TokenResponse getUserAndReturnToken(EssentialUserInfo userInfo) {
 
         String email = userInfo.getEmail();
 
         Optional<User> optionalUser = userRepository.findByEmail(email);
         User user;
 
-        if (optionalUser.isEmpty()) {
+        Boolean isFirstLogin = optionalUser.isEmpty();
+
+        if (isFirstLogin) {
             user = saveUser(userInfo);
         } else {
             user = optionalUser.get();
             user.checkProvider(userInfo.getProvider());
         }
 
-        return user.getId();
+        return getTokenResponse(user.getId(), isFirstLogin);
     }
 
     @Transactional
@@ -268,7 +260,7 @@ public class AuthService {
     }
 
 
-    private TokenResponse getTokenResponse(Integer userId) {
+    private TokenResponse getTokenResponse(Integer userId, Boolean isFirstLogin) {
         String accessToken = jwtTokenProvider.generateAccessToken(userId);
 
         RefreshToken refreshToken = refreshTokenRepository.save(RefreshToken.builder()
@@ -277,7 +269,11 @@ public class AuthService {
                 .build()
         );
 
-        return new TokenResponse(accessToken, refreshToken.getRefreshToken());
+        return TokenResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken.getRefreshToken())
+                .isFirstLogin(isFirstLogin)
+                .build();
     }
 
 }
