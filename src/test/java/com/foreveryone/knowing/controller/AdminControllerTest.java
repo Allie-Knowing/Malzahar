@@ -16,6 +16,7 @@ import com.foreveryone.knowing.repository.admin.ReportRepository;
 import com.foreveryone.knowing.repository.admin.answer.VideoRepository;
 import com.foreveryone.knowing.repository.auth.UserRepository;
 import com.foreveryone.knowing.security.JwtTokenProvider;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -121,9 +122,13 @@ class AdminControllerTest {
 
     @Test
     void deleteVideo() throws Exception {
+        Assertions.assertThat(videoRepository.findById(video.getId()).orElseThrow().getDeletedAt()).isNull();
+
         mvc.perform(delete("/admin/video/" + video.getId())
                 .param("reportId", report.getId().toString()))
                 .andExpect(status().isNoContent());
+
+        Assertions.assertThat(videoRepository.findById(video.getId()).orElseThrow().getDeletedAt()).isNotNull();
     }
 
     @Test
