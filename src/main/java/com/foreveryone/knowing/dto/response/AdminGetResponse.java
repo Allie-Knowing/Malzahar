@@ -48,7 +48,7 @@ public class AdminGetResponse {
                     .videoId(report.getVideo().getId())
                     .userId(report.getUser().getId())
                     .description(report.getDescription())
-                    .commentId(report.getComment().getId())
+                    .commentId(report.getComment() == null ? null : report.getComment().getId())
                     .createdAt(report.getCreatedAt())
                     .build();
         }
