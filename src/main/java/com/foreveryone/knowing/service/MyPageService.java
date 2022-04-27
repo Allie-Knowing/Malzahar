@@ -1,15 +1,15 @@
 package com.foreveryone.knowing.service;
 
-import com.foreveryone.knowing.dto.request.InterestCategoriesRequest;
-import com.foreveryone.knowing.dto.request.NicknameRequest;
-import com.foreveryone.knowing.dto.response.InterestResponse;
-import com.foreveryone.knowing.entity.Interest;
-import com.foreveryone.knowing.entity.InterestId;
-import com.foreveryone.knowing.entity.User;
+import com.foreveryone.knowing.dto.request.mypage.InterestCategoriesRequest;
+import com.foreveryone.knowing.dto.request.mypage.NicknameRequest;
+import com.foreveryone.knowing.dto.response.mypage.InterestResponse;
+import com.foreveryone.knowing.entity.mypage.Interest;
+import com.foreveryone.knowing.entity.mypage.InterestId;
+import com.foreveryone.knowing.entity.auth.User;
 import com.foreveryone.knowing.error.exceptions.NotFoundException;
-import com.foreveryone.knowing.repository.InterestCategoryRepository;
-import com.foreveryone.knowing.repository.InterestRepository;
-import com.foreveryone.knowing.repository.UserRepository;
+import com.foreveryone.knowing.repository.mypage.InterestCategoryRepository;
+import com.foreveryone.knowing.repository.mypage.InterestRepository;
+import com.foreveryone.knowing.repository.auth.UserRepository;
 import com.foreveryone.knowing.security.AuthFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

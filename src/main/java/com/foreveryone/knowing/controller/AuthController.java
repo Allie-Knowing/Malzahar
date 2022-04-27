@@ -1,13 +1,13 @@
 package com.foreveryone.knowing.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.foreveryone.knowing.dto.request.CodeRequest;
-import com.foreveryone.knowing.dto.request.GoogleLoginRequest;
-import com.foreveryone.knowing.dto.request.IdTokenRequest;
-import com.foreveryone.knowing.dto.response.TokenResponse;
+import com.foreveryone.knowing.dto.request.auth.CodeRequest;
+import com.foreveryone.knowing.dto.request.auth.GoogleLoginRequest;
+import com.foreveryone.knowing.dto.request.auth.IdTokenRequest;
+import com.foreveryone.knowing.dto.response.auth.TokenResponse;
 import com.foreveryone.knowing.error.exceptions.UnsupportedProviderException;
 import com.foreveryone.knowing.service.AuthService;
-import com.foreveryone.knowing.oauth.OauthProvider;
+import com.foreveryone.knowing.oauth.utils.OauthProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

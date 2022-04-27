@@ -1,10 +1,10 @@
 package com.foreveryone.knowing.controller;
 
-import com.foreveryone.knowing.dto.request.CommentReportRequest;
-import com.foreveryone.knowing.dto.request.InquiryRequest;
-import com.foreveryone.knowing.dto.request.VideoReportRequest;
-import com.foreveryone.knowing.dto.response.AdminGetResponse.InquiryResponse;
-import com.foreveryone.knowing.dto.response.AdminGetResponse.ReportResponse;
+import com.foreveryone.knowing.dto.request.admin.CommentReportRequest;
+import com.foreveryone.knowing.dto.request.admin.InquiryRequest;
+import com.foreveryone.knowing.dto.request.admin.VideoReportRequest;
+import com.foreveryone.knowing.dto.response.admin.AdminGetResponse.InquiryResponse;
+import com.foreveryone.knowing.dto.response.admin.AdminGetResponse.ReportResponse;
 import com.foreveryone.knowing.service.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,9 +43,9 @@ public class AdminController {
 
     @DeleteMapping("/video/{videoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteVideo(@PathVariable Integer videoId) {
+    public void deleteVideo(@PathVariable Integer videoId, @RequestParam Integer reportId) {
         System.out.println("영상 삭제 요청");
-        adminService.deleteVideo(videoId);
+        adminService.deleteVideo(videoId, reportId);
     }
 
     @PostMapping("/inquiry") @PreAuthorize("isAuthenticated()")

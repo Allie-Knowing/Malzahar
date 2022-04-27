@@ -1,8 +1,8 @@
 package com.foreveryone.knowing.controller;
 
-import com.foreveryone.knowing.dto.request.InterestCategoriesRequest;
-import com.foreveryone.knowing.dto.request.NicknameRequest;
-import com.foreveryone.knowing.dto.response.InterestResponse;
+import com.foreveryone.knowing.dto.request.mypage.InterestCategoriesRequest;
+import com.foreveryone.knowing.dto.request.mypage.NicknameRequest;
+import com.foreveryone.knowing.dto.response.mypage.InterestResponse;
 import com.foreveryone.knowing.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
