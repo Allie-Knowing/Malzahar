@@ -1,5 +1,6 @@
 package com.foreveryone.knowing.entity;
 
+import com.foreveryone.knowing.entity.auth.User;
 import lombok.*;
 
 import javax.persistence.*;

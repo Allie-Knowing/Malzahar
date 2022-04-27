@@ -1,11 +1,19 @@
 package com.foreveryone.knowing.service;
 
-import com.foreveryone.knowing.dto.request.CommentReportRequest;
-import com.foreveryone.knowing.dto.request.InquiryRequest;
-import com.foreveryone.knowing.dto.request.VideoReportRequest;
-import com.foreveryone.knowing.entity.*;
+import com.foreveryone.knowing.dto.request.admin.CommentReportRequest;
+import com.foreveryone.knowing.dto.request.admin.InquiryRequest;
+import com.foreveryone.knowing.dto.request.admin.VideoReportRequest;
+import com.foreveryone.knowing.entity.admin.inquiry.InquiryCategoryEnum;
+import com.foreveryone.knowing.entity.admin.inquiry.Inquiry;
+import com.foreveryone.knowing.entity.admin.inquiry.InquiryCategory;
+import com.foreveryone.knowing.entity.admin.Report;
+import com.foreveryone.knowing.entity.auth.User;
 import com.foreveryone.knowing.error.exceptions.NotFoundException;
-import com.foreveryone.knowing.repository.*;
+import com.foreveryone.knowing.repository.admin.*;
+import com.foreveryone.knowing.repository.admin.answer.CommentRepository;
+import com.foreveryone.knowing.repository.admin.answer.VideoRepository;
+import com.foreveryone.knowing.repository.admin.inquiry.InquiryCategoryRepository;
+import com.foreveryone.knowing.repository.admin.inquiry.InquiryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +21,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.foreveryone.knowing.dto.response.AdminGetResponse.*;
+import static com.foreveryone.knowing.dto.response.admin.AdminGetResponse.*;
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 
 @Service
@@ -75,7 +83,7 @@ public class AdminService {
         Timestamp now = new Timestamp(System.currentTimeMillis());
 
         InquiryCategory inquiryCategory = inquiryCategoryRepository.save(InquiryCategory.builder()
-                .category(Category.valueOf(inquiryRequest.getCategory()))
+                .inquiryCategoryEnum(InquiryCategoryEnum.valueOf(inquiryRequest.getCategory()))
                 .build());
 
         inquiryRepository.save(Inquiry.builder()

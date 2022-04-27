@@ -1,8 +1,8 @@
 package com.foreveryone.knowing.security;
 
-import com.foreveryone.knowing.entity.User;
-import com.foreveryone.knowing.error.exceptions.InvalidUserTokenException;
-import com.foreveryone.knowing.repository.UserRepository;
+import com.foreveryone.knowing.entity.auth.User;
+import com.foreveryone.knowing.error.exceptions.auth.InvalidUserTokenException;
+import com.foreveryone.knowing.repository.auth.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;

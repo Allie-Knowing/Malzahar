@@ -1,12 +1,16 @@
 package com.foreveryone.knowing.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.foreveryone.knowing.dto.request.InquiryRequest;
-import com.foreveryone.knowing.dto.request.VideoReportRequest;
-import com.foreveryone.knowing.entity.User;
-import com.foreveryone.knowing.entity.Video;
-import com.foreveryone.knowing.oauth.OauthProvider;
-import com.foreveryone.knowing.repository.*;
+import com.foreveryone.knowing.dto.request.admin.InquiryRequest;
+import com.foreveryone.knowing.dto.request.admin.VideoReportRequest;
+import com.foreveryone.knowing.entity.auth.User;
+import com.foreveryone.knowing.entity.admin.answer.Video;
+import com.foreveryone.knowing.oauth.utils.OauthProvider;
+import com.foreveryone.knowing.repository.admin.inquiry.InquiryCategoryRepository;
+import com.foreveryone.knowing.repository.admin.inquiry.InquiryRepository;
+import com.foreveryone.knowing.repository.admin.ReportRepository;
+import com.foreveryone.knowing.repository.admin.answer.VideoRepository;
+import com.foreveryone.knowing.repository.auth.UserRepository;
 import com.foreveryone.knowing.security.JwtTokenProvider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
