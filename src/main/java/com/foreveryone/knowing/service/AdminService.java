@@ -117,7 +117,7 @@ public class AdminService {
 
     public List<InquiryResponse> inquiryList() {
         System.out.println("문의 리스트");
-        return inquiryRepository.findAllByOrderByInquiryCategoryCategory().stream()
+        return inquiryRepository.findAllByOrderByInquiryCategoryInquiryCategoryEnum().stream()
                 .map(InquiryResponse::from)
                 .collect(Collectors.toList());
     }
