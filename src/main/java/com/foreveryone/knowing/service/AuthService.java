@@ -7,6 +7,7 @@ import com.foreveryone.knowing.dto.request.CodeRequest;
 import com.foreveryone.knowing.dto.request.GoogleLoginRequest;
 import com.foreveryone.knowing.dto.request.IdTokenRequest;
 import com.foreveryone.knowing.dto.response.TokenResponse;
+import com.foreveryone.knowing.entity.Iq;
 import com.foreveryone.knowing.entity.RefreshToken;
 import com.foreveryone.knowing.entity.User;
 import com.foreveryone.knowing.error.exceptions.InvalidIdTokenException;
@@ -14,6 +15,7 @@ import com.foreveryone.knowing.oauth.AppleJwtUtils;
 import com.foreveryone.knowing.error.exceptions.InvalidRefreshTokenException;
 import com.foreveryone.knowing.oauth.client.google.GoogleAuthClient;
 import com.foreveryone.knowing.oauth.dto.response.google.GoogleAuthResponse;
+import com.foreveryone.knowing.repository.IqRepository;
 import com.foreveryone.knowing.repository.RefreshTokenRepository;
 import com.foreveryone.knowing.repository.UserRepository;
 import com.foreveryone.knowing.oauth.OauthRequestDtoBuilder;
@@ -38,9 +40,11 @@ import com.foreveryone.knowing.oauth.dto.response.naver.NaverUserInfoResponse;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.Timestamp;
@@ -54,6 +58,7 @@ import static com.foreveryone.knowing.oauth.OauthProvider.*;
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final IqRepository iqRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
     private final GoogleUserInfoClient googleUserInfoClient;
@@ -243,10 +248,10 @@ public class AuthService {
         return user.getId();
     }
 
-
+    @Transactional
     private User saveUser(EssentialUserInfo userInfo) {
         Timestamp now = new Timestamp(System.currentTimeMillis());
-        return userRepository.save(User.builder()
+        User user = userRepository.save(User.builder()
                 .email(userInfo.getEmail())
                 .profile(userInfo.getPicture())
                 .name(userInfo.getName())
@@ -255,6 +260,13 @@ public class AuthService {
                 .updatedAt(now)
                 .lastAccessedAt(now)
                 .build());
+
+        iqRepository.save(Iq.builder()
+                .user(user)
+                .curCnt(BigInteger.valueOf(0))
+                .totCnt(BigInteger.valueOf(0))
+                .build());
+        return user;
     }
 
 
