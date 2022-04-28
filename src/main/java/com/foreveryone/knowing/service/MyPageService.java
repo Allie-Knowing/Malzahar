@@ -37,9 +37,10 @@ public class MyPageService {
     }
 
     public List<InterestResponse> queryInterests() {
-        return interestCategoryRepository.findAll()
-                        .stream().map(InterestResponse::of)
-                        .collect(Collectors.toList());
+        User currentUser = authFacade.getCurrentUser();
+        return interestRepository.findAllByUser(currentUser)
+                .stream().map(InterestResponse::of)
+                .collect(Collectors.toList());
     }
 
     public void saveInterests(InterestCategoriesRequest interestsRequest) {
