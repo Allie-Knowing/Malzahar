@@ -7,6 +7,7 @@ public enum ErrorCode {
 
     REQUIRE_PARAMETER_MISSING(400, "parameter missing."),
     UNSUPPORTED_PROVIDER(400, "Unsupported provider."),
+    INVALID_INPUT_VALUE(400, "bad request."),
     INVALID_USER_TOKEN(401, "Invalid user token."),
     INVALID_REFRESH_TOKEN(401, "Invalid refresh token."),
     INVALID_ID_TOKEN(401, "Invalid ID token."),
