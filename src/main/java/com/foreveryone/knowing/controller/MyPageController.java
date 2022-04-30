@@ -7,6 +7,7 @@ import com.foreveryone.knowing.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -36,5 +37,11 @@ public class MyPageController {
     public void saveInterests(@Valid @RequestBody InterestCategoriesRequest interestsRequest) {
         System.out.println("관심 분야 저장/수정 요청");
         myPageService.saveInterests(interestsRequest);
+    }
+
+    @PutMapping("/profile")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void updatePicture(@RequestPart(value = "file")MultipartFile file) {
+        myPageService.updatePicture(file);
     }
 }

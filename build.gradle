@@ -2,6 +2,7 @@ buildscript {
 	ext {
 		junitVersion = '5.7.0'
 		assertjVersion = '3.19.0'
+		cloudStarterAwsVersion = '2.2.6.RELEASE'
 	}
 }
 plugins {
@@ -51,6 +52,7 @@ dependencies {
 	//redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-aws', version: cloudStarterAwsVersion
 	//test
 	testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: junitVersion
 	testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: junitVersion

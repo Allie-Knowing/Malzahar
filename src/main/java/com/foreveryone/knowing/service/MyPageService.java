@@ -7,6 +7,7 @@ import com.foreveryone.knowing.entity.mypage.Interest;
 import com.foreveryone.knowing.entity.mypage.InterestId;
 import com.foreveryone.knowing.entity.auth.User;
 import com.foreveryone.knowing.error.exceptions.NotFoundException;
+import com.foreveryone.knowing.file.FileUploadProvider;
 import com.foreveryone.knowing.repository.mypage.InterestCategoryRepository;
 import com.foreveryone.knowing.repository.mypage.InterestRepository;
 import com.foreveryone.knowing.repository.auth.UserRepository;
@@ -14,6 +15,7 @@ import com.foreveryone.knowing.security.AuthFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +28,7 @@ public class MyPageService {
     private final InterestRepository interestRepository;
     private final InterestCategoryRepository interestCategoryRepository;
     private final AuthFacade authFacade;
+    private final FileUploadProvider fileUploadProvider;
 
     @Transactional
     public void updateNickname(NicknameRequest nicknameRequest) {
@@ -76,5 +79,14 @@ public class MyPageService {
             )
         );
         System.out.println("관심 분야 수정 완료");
+    }
+
+    public void updatePicture(MultipartFile file) {
+        User currentUser = authFacade.getCurrentUser();
+
+        String fileName = fileUploadProvider.uploadFile(file);
+
+        currentUser.updateProfile(fileName);
+        userRepository.save(currentUser);
     }
 }

@@ -58,4 +58,8 @@ public class User {
     public void updateNickname(String nickname) {
         this.name = nickname;
     }
+
+    public void updateProfile(String fileName) {
+        this.profile = fileName;
+    }
 }
