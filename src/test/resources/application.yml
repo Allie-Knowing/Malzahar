@@ -41,3 +41,16 @@ oauth:
     userinfo_url: http://localhost:9561
   apple:
     auth_url: localhost
+
+cloud:
+  aws:
+    s3:
+      bucket: b
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      instanceProfile: true
+      accessKey: a
+      secretKey: s
