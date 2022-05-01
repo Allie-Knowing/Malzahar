@@ -16,8 +16,8 @@ spring:
     port: ${REDIS_PORT}
   servlet:
     multipart:
-      maxFileSize=30MB
-      maxRequestSize=30MB
+      maxFileSize: 30MB
+      maxRequestSize: 30MB
 
 auth:
   jwt:
