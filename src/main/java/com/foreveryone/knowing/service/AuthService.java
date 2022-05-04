@@ -10,6 +10,9 @@ import com.foreveryone.knowing.dto.response.auth.TokenResponse;
 import com.foreveryone.knowing.entity.Iq;
 import com.foreveryone.knowing.entity.auth.redis.RefreshToken;
 import com.foreveryone.knowing.entity.auth.User;
+import com.foreveryone.knowing.entity.tier.Tier;
+import com.foreveryone.knowing.entity.tier.TierCategory;
+import com.foreveryone.knowing.error.exceptions.NotFoundException;
 import com.foreveryone.knowing.error.exceptions.auth.InvalidIdTokenException;
 import com.foreveryone.knowing.oauth.utils.AppleJwtUtils;
 import com.foreveryone.knowing.error.exceptions.auth.InvalidRefreshTokenException;
@@ -27,6 +30,8 @@ import com.foreveryone.knowing.oauth.dto.response.facebook.FacebookAuthResponse;
 import com.foreveryone.knowing.oauth.dto.response.facebook.FacebookUserInfoResponse;
 import com.foreveryone.knowing.oauth.dto.response.kakao.KakaoAuthResponse;
 import com.foreveryone.knowing.oauth.dto.response.kakao.KakaoUserInfoResponse;
+import com.foreveryone.knowing.repository.tier.TierCategoryRepository;
+import com.foreveryone.knowing.repository.tier.TierRepository;
 import com.foreveryone.knowing.security.JwtConfigurationProperties;
 import com.foreveryone.knowing.security.JwtTokenProvider;
 import com.foreveryone.knowing.oauth.client.google.GoogleUserInfoClient;
@@ -57,6 +62,9 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final IqRepository iqRepository;
+    private final TierRepository tierRepository;
+    private final TierCategoryRepository tierCategoryRepository;
+
     private final RefreshTokenRepository refreshTokenRepository;
 
     private final GoogleUserInfoClient googleUserInfoClient;
@@ -256,6 +264,14 @@ public class AuthService {
                 .curCnt(BigInteger.valueOf(0))
                 .totCnt(BigInteger.valueOf(0))
                 .build());
+
+        tierRepository.save(Tier.builder()
+                .updatedAt(now)
+                .user(user)
+                .tierCategory(tierCategoryRepository.findById(1)
+                        .orElseThrow(() -> new NotFoundException("티어 카테고리를 찾을 수 없음")))
+                .build());
+
         return user;
     }
 
