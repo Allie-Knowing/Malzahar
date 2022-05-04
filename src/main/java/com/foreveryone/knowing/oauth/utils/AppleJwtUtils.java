@@ -27,8 +27,6 @@ public class AppleJwtUtils {
 
         ApplePublicKeyResponse response = appleAuthClient.appleKeys();
 
-        System.out.println("identityToken = " + identityToken);
-
         String headerOfIdentityToken = identityToken.substring(0, identityToken.indexOf("."));
         Map<String, String> header = new ObjectMapper().readValue(new String(Base64.getDecoder().decode(headerOfIdentityToken), StandardCharsets.UTF_8), Map.class);
         System.out.println("header = " + header);
