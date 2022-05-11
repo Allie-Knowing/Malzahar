@@ -97,8 +97,7 @@ public class MyPageService {
 
     public void following(Integer userId) {
         User currentUser = authFacade.getCurrentUser();
-        User following = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("id: {" + userId + "}User Not Found"));
+        User following = getUserById(userId);
 
         followRepository.save(Follow.builder()
                 .followId(FollowId.builder()
@@ -110,17 +109,32 @@ public class MyPageService {
                 .build());
     }
 
-    public List<FollowResponse> queryFollowing() {
-        User currentUser = authFacade.getCurrentUser();
+    public List<FollowResponse> queryFollowing(Integer userId) {
+        User currentUser = getUserById(userId);
         return followRepository.findAllByFollower(currentUser).stream()
                 .map(follow -> FollowResponse.of(follow.getFollowing()))
                 .collect(Collectors.toList());
     }
 
-    public List<FollowResponse> queryFollower() {
-        User currentUser = authFacade.getCurrentUser();
+    public List<FollowResponse> queryFollower(Integer userId) {
+        User currentUser = getUserById(userId);
         return followRepository.findAllByFollowing(currentUser).stream()
                 .map(follow -> FollowResponse.of(follow.getFollower()))
                 .collect(Collectors.toList());
     }
+
+    public void unfollowing(Integer userId) {
+        User currentUser = authFacade.getCurrentUser();
+        getUserById(userId);                            //user 가 존재하는지 검사
+        followRepository.deleteById(FollowId.builder()
+                .follower(currentUser.getId())
+                .following(userId)
+                .build());
+    }
+
+    private User getUserById(Integer userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("id : { " + userId + " } User Not Found."));
+    }
+
 }
