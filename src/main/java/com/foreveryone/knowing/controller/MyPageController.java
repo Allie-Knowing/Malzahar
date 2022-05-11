@@ -22,28 +22,28 @@ public class MyPageController {
     private final MyPageService myPageService;
 
     @PutMapping("/nickname")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.CREATED) @PreAuthorize("isAuthenticated()")
     public void updateNickname(@Valid @RequestBody NicknameRequest nicknameRequest) {
         System.out.println("닉네임 변경 요청");
         myPageService.updateNickname(nicknameRequest);
     }
 
     @GetMapping("/interests")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK) @PreAuthorize("isAuthenticated()")
     public List<InterestResponse> queryInterests() {
         System.out.println("관심 분야 요청");
         return myPageService.queryInterests();
     }
 
     @PostMapping("/interests")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.CREATED) @PreAuthorize("isAuthenticated()")
     public void saveInterests(@Valid @RequestBody InterestCategoriesRequest interestsRequest) {
         System.out.println("관심 분야 저장/수정 요청");
         myPageService.saveInterests(interestsRequest);
     }
 
     @PutMapping("/profile")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.CREATED) @PreAuthorize("isAuthenticated()")
     public void updatePicture(@RequestPart(value = "file")MultipartFile file) {
         System.out.println("프로필 수정");
         myPageService.updatePicture(file);
