@@ -2,12 +2,16 @@ package com.foreveryone.knowing.service;
 
 import com.foreveryone.knowing.dto.request.mypage.InterestCategoriesRequest;
 import com.foreveryone.knowing.dto.request.mypage.NicknameRequest;
+import com.foreveryone.knowing.dto.response.mypage.FollowResponse;
 import com.foreveryone.knowing.dto.response.mypage.InterestResponse;
+import com.foreveryone.knowing.entity.mypage.Follow;
+import com.foreveryone.knowing.entity.mypage.FollowId;
 import com.foreveryone.knowing.entity.mypage.Interest;
 import com.foreveryone.knowing.entity.mypage.InterestId;
 import com.foreveryone.knowing.entity.auth.User;
 import com.foreveryone.knowing.error.exceptions.NotFoundException;
 import com.foreveryone.knowing.file.FileUploadProvider;
+import com.foreveryone.knowing.repository.mypage.FollowRepository;
 import com.foreveryone.knowing.repository.mypage.InterestCategoryRepository;
 import com.foreveryone.knowing.repository.mypage.InterestRepository;
 import com.foreveryone.knowing.repository.auth.UserRepository;
@@ -29,6 +33,7 @@ public class MyPageService {
     private final InterestCategoryRepository interestCategoryRepository;
     private final AuthFacade authFacade;
     private final FileUploadProvider fileUploadProvider;
+    private final FollowRepository followRepository;
 
     @Transactional
     public void updateNickname(NicknameRequest nicknameRequest) {
@@ -88,5 +93,34 @@ public class MyPageService {
 
         currentUser.updateProfile(fileName);
         userRepository.save(currentUser);
+    }
+
+    public void following(Integer userId) {
+        User currentUser = authFacade.getCurrentUser();
+        User following = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("id: {" + userId + "}User Not Found"));
+
+        followRepository.save(Follow.builder()
+                .followId(FollowId.builder()
+                        .follower(currentUser.getId())
+                        .following(following.getId())
+                        .build())
+                .following(following)
+                .follower(currentUser)
+                .build());
+    }
+
+    public List<FollowResponse> queryFollowing() {
+        User currentUser = authFacade.getCurrentUser();
+        return followRepository.findAllByFollower(currentUser).stream()
+                .map(follow -> FollowResponse.of(follow.getFollowing()))
+                .collect(Collectors.toList());
+    }
+
+    public List<FollowResponse> queryFollower() {
+        User currentUser = authFacade.getCurrentUser();
+        return followRepository.findAllByFollowing(currentUser).stream()
+                .map(follow -> FollowResponse.of(follow.getFollower()))
+                .collect(Collectors.toList());
     }
 }

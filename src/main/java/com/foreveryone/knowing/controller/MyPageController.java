@@ -1,11 +1,14 @@
 package com.foreveryone.knowing.controller;
 
+import com.foreveryone.knowing.dto.request.mypage.FollowingRequest;
 import com.foreveryone.knowing.dto.request.mypage.InterestCategoriesRequest;
 import com.foreveryone.knowing.dto.request.mypage.NicknameRequest;
+import com.foreveryone.knowing.dto.response.mypage.FollowResponse;
 import com.foreveryone.knowing.dto.response.mypage.InterestResponse;
 import com.foreveryone.knowing.service.MyPageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,6 +45,28 @@ public class MyPageController {
     @PutMapping("/profile")
     @ResponseStatus(HttpStatus.CREATED)
     public void updatePicture(@RequestPart(value = "file")MultipartFile file) {
+        System.out.println("프로필 수정");
         myPageService.updatePicture(file);
+    }
+
+    @PostMapping("/following")
+    @ResponseStatus(HttpStatus.CREATED) @PreAuthorize("isAuthenticated()")
+    public void following(@Valid @RequestBody FollowingRequest request) {
+        System.out.println("팔로잉");
+        myPageService.following(request.getUserId());
+    }
+
+    @GetMapping("/follower")
+    @ResponseStatus(HttpStatus.OK) @PreAuthorize("isAuthenticated()")
+    public List<FollowResponse> queryFollowers() {
+        System.out.println("팔로워 리스트");
+        return myPageService.queryFollower();
+    }
+
+    @GetMapping("/following")
+    @ResponseStatus(HttpStatus.OK) @PreAuthorize("isAuthenticated()")
+    public List<FollowResponse> queryFollowing() {
+        System.out.println("팔로잉 리스트");
+        return myPageService.queryFollowing();
     }
 }
