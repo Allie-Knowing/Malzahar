@@ -56,17 +56,24 @@ public class MyPageController {
         myPageService.following(request.getUserId());
     }
 
+    @DeleteMapping("/following")
+    @ResponseStatus(HttpStatus.NO_CONTENT) @PreAuthorize("isAuthenticated()")
+    public void unfollowing(@Valid @RequestBody FollowingRequest request) {
+        System.out.println("팔로잉");
+        myPageService.unfollowing(request.getUserId());
+    }
+
     @GetMapping("/follower")
     @ResponseStatus(HttpStatus.OK) @PreAuthorize("isAuthenticated()")
-    public List<FollowResponse> queryFollowers() {
+    public List<FollowResponse> queryFollowers(@RequestParam Integer userId) {
         System.out.println("팔로워 리스트");
-        return myPageService.queryFollower();
+        return myPageService.queryFollower(userId);
     }
 
     @GetMapping("/following")
     @ResponseStatus(HttpStatus.OK) @PreAuthorize("isAuthenticated()")
-    public List<FollowResponse> queryFollowing() {
+    public List<FollowResponse> queryFollowing(@RequestParam Integer userId) {
         System.out.println("팔로잉 리스트");
-        return myPageService.queryFollowing();
+        return myPageService.queryFollowing(userId);
     }
 }
