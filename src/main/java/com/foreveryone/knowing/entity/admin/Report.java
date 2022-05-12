@@ -41,4 +41,11 @@ public class Report {
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
+    @Column(columnDefinition = "tinyint(1) default false")
+    private boolean passed;
+
+    public void softDelete() {
+        this.passed = true;
+    }
+
 }

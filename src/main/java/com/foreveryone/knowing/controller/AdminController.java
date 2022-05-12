@@ -44,8 +44,27 @@ public class AdminController {
     @DeleteMapping("/video/{videoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteVideo(@PathVariable Integer videoId, @RequestParam Integer reportId) {
-        System.out.println("영상 삭제 요청");
+        System.out.println("영상 or 영상 답변 삭제 요청");
         adminService.deleteVideo(videoId, reportId);
+    }
+
+    @DeleteMapping("/comment/{commentId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteComment(@PathVariable Integer commentId, @RequestParam Integer reportId) {
+        System.out.println("글답변 삭제 요청");
+        adminService.deleteComment(commentId, reportId);
+    }
+
+    @PostMapping("/report/{reportId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void reportPass(@PathVariable Integer reportId) {
+        adminService.reportPass(reportId);
+    }
+
+    @PostMapping("/inquiry/{inquiryId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void inquiryPass(@PathVariable Integer inquiryId) {
+        adminService.inquiryPass(inquiryId);
     }
 
     @PostMapping("/inquiry") @PreAuthorize("isAuthenticated()")
