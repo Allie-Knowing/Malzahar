@@ -112,7 +112,7 @@ public class AdminService {
         report.softDelete();
     }
 
-    public void inquiryPass(Integer inquiryId) {
+    public void deleteInquiry(Integer inquiryId) {
         inquiryRepository.deleteById(inquiryId);
     }
 

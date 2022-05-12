@@ -55,16 +55,18 @@ public class AdminController {
         adminService.deleteComment(commentId, reportId);
     }
 
-    @PostMapping("/report/{reportId}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @DeleteMapping("/report/{reportId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void reportPass(@PathVariable Integer reportId) {
+        System.out.println("신고 삭제 요청");
         adminService.reportPass(reportId);
     }
 
-    @PostMapping("/inquiry/{inquiryId}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void inquiryPass(@PathVariable Integer inquiryId) {
-        adminService.inquiryPass(inquiryId);
+    @DeleteMapping("/inquiry/{inquiryId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteInquiry(@PathVariable Integer inquiryId) {
+        System.out.println("문의 삭제 요청");
+        adminService.deleteInquiry(inquiryId);
     }
 
     @PostMapping("/inquiry") @PreAuthorize("isAuthenticated()")
