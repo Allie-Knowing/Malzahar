@@ -4,6 +4,7 @@ import com.foreveryone.knowing.dto.request.admin.CommentReportRequest;
 import com.foreveryone.knowing.dto.request.admin.InquiryRequest;
 import com.foreveryone.knowing.dto.request.admin.VideoReportRequest;
 import com.foreveryone.knowing.entity.actionpoint.ActionPoint;
+import com.foreveryone.knowing.entity.admin.answer.Comment;
 import com.foreveryone.knowing.entity.admin.answer.Video;
 import com.foreveryone.knowing.entity.admin.inquiry.InquiryCategoryEnum;
 import com.foreveryone.knowing.entity.admin.inquiry.Inquiry;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.foreveryone.knowing.dto.response.admin.AdminGetResponse.*;
@@ -52,8 +54,6 @@ public class AdminService {
                         ))
                         .createdAt(now())
                         .build());
-
-        System.out.println("비디오 신고 제출");
     }
 
     public void submitCommentReport(CommentReportRequest commentReportRequest) {
@@ -70,20 +70,16 @@ public class AdminService {
                         ))
                         .createdAt(now())
                         .build());
-
-        System.out.println("글답변 신고");
     }
 
     public List<ReportResponse> reportList() {
-        System.out.println("신고 리스트 보기");
-        return reportRepository.findAll().stream()
+        return reportRepository.findAllByPassed(false).stream()
                 .map(ReportResponse::from)
                 .collect(Collectors.toList());
     }
 
     @Transactional
     public void deleteVideo(Integer videoId, Integer reportId) {
-        System.out.println("비디오 삭제");
         Integer reportApproveCategoryId = 8;
         Integer reportedCategoryId = 10;
 
@@ -94,6 +90,30 @@ public class AdminService {
         saveActionPoint(reportedCategoryId, video.getUser());
 
         video.softDelete();
+    }
+
+    @Transactional
+    public void deleteComment(Integer commentId, Integer reportId) {
+        Integer reportApproveCategoryId = 8;
+        Integer reportedCategoryId = 10;
+
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NotFoundException("video ID Not found."));
+        Report report = reportRepository.findById(reportId).orElseThrow(() -> new NotFoundException("report ID Not found."));
+
+        saveActionPoint(reportApproveCategoryId, report.getUser());
+        saveActionPoint(reportedCategoryId, comment.getUser());
+
+        comment.softDelete();
+    }
+
+    public void reportPass(Integer reportId) {
+        Report report = reportRepository.findById(reportId)
+                .orElseThrow(() -> new NotFoundException("report not found."));
+        report.softDelete();
+    }
+
+    public void inquiryPass(Integer inquiryId) {
+        inquiryRepository.deleteById(inquiryId);
     }
 
     public void inquiry(InquiryRequest inquiryRequest) {
