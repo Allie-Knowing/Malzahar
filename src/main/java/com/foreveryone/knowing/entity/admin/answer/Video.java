@@ -25,6 +25,13 @@ public class Video {
     @Column(name = "deleted_at")
     private Timestamp deletedAt;
 
+    @Column(name = "video_url", nullable = false, length = 2000)
+    private String videoUrl;
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
     public Video softDelete() {
         this.deletedAt = new Timestamp(System.currentTimeMillis());
         return this;

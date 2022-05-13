@@ -44,6 +44,7 @@ public class AdminGetResponse {
         private final Integer reportId;
         private final Integer commentId;
         private final String description;
+        private final String videoUrl;
         private final Timestamp createdAt;
 
         public static ReportResponse from(Report report) {
@@ -53,6 +54,7 @@ public class AdminGetResponse {
                     .description(report.getDescription())
                     .commentId(report.getComment() == null ? null : report.getComment().getId())
                     .createdAt(report.getCreatedAt())
+                    .videoUrl(report.getVideo().getVideoUrl())
                     .reportId(report.getId())
                     .build();
         }
