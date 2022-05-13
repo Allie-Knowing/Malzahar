@@ -76,6 +76,7 @@ class AdminControllerTest {
         );
         video = videoRepository.save(Video.builder()
                 .user(user)
+                .videoUrl("http://s3.vmdp")
                 .build());
         report = reportRepository.save(Report.builder()
                 .description("스팸")
