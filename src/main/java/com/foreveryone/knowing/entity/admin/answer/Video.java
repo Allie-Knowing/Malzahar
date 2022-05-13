@@ -25,7 +25,8 @@ public class Video {
     @Column(name = "deleted_at")
     private Timestamp deletedAt;
 
-    public void softDelete() {
+    public Video softDelete() {
         this.deletedAt = new Timestamp(System.currentTimeMillis());
+        return this;
     }
 }

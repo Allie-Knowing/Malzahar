@@ -27,8 +27,9 @@ public class Comment {
 
     private Timestamp deletedAt;
 
-    public void softDelete() {
+    public Comment softDelete() {
         this.deletedAt = new Timestamp(System.currentTimeMillis());
+        return this;
     }
 
 }

@@ -44,8 +44,9 @@ public class Report {
     @Column(columnDefinition = "tinyint(1) default false")
     private boolean passed;
 
-    public void softDelete() {
+    public Report softDelete() {
         this.passed = true;
+        return this;
     }
 
 }

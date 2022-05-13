@@ -89,7 +89,7 @@ public class AdminService {
         saveActionPoint(reportApproveCategoryId, report.getUser());
         saveActionPoint(reportedCategoryId, video.getUser());
 
-        video.softDelete();
+        videoRepository.save(video.softDelete());
     }
 
     @Transactional
@@ -103,13 +103,13 @@ public class AdminService {
         saveActionPoint(reportApproveCategoryId, report.getUser());
         saveActionPoint(reportedCategoryId, comment.getUser());
 
-        comment.softDelete();
+        commentRepository.save(comment.softDelete());
     }
 
     public void reportPass(Integer reportId) {
         Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new NotFoundException("report not found."));
-        report.softDelete();
+        reportRepository.save(report.softDelete());
     }
 
     public void deleteInquiry(Integer inquiryId) {
