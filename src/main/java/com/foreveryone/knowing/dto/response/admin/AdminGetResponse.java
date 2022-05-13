@@ -21,6 +21,7 @@ public class AdminGetResponse {
         private final String description;
         private final InquiryCategoryEnum category;
         private final Timestamp createdAt;
+        private final Integer inquiryId;
         private final String email;
 
         public static InquiryResponse from(Inquiry inquiry) {
@@ -30,6 +31,7 @@ public class AdminGetResponse {
                     .description(inquiry.getDescription())
                     .category(inquiry.getInquiryCategory().getInquiryCategoryEnum())
                     .createdAt(inquiry.getCreatedAt())
+                    .inquiryId(inquiry.getId())
                     .email(inquiry.getUser().getEmail())
                     .build();
         }
