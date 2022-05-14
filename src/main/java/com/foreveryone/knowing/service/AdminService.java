@@ -113,6 +113,7 @@ public class AdminService {
     }
 
     public void deleteInquiry(Integer inquiryId) {
+        if (!inquiryRepository.existsById(inquiryId)) throw new NotFoundException("inquiry id not found");
         inquiryRepository.deleteById(inquiryId);
     }
 
