@@ -68,6 +68,7 @@ public class GlobalExceptionHandler {
         String errorDescription = e.getMessage();
         ErrorResponse res = ErrorResponse.of(errorCode, errorDescription);
 
+        e.printStackTrace();
         System.out.println("errorDescription = " + errorDescription);
 
         return new ResponseEntity<>(res, HttpStatus.valueOf(errorCode.getStatus()));
