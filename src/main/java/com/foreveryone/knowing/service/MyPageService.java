@@ -2,6 +2,7 @@ package com.foreveryone.knowing.service;
 
 import com.foreveryone.knowing.dto.request.mypage.InterestCategoriesRequest;
 import com.foreveryone.knowing.dto.request.mypage.NicknameRequest;
+import com.foreveryone.knowing.dto.response.mypage.BooleanResponse;
 import com.foreveryone.knowing.dto.response.mypage.FollowResponse;
 import com.foreveryone.knowing.dto.response.mypage.InterestResponse;
 import com.foreveryone.knowing.entity.mypage.Follow;
@@ -132,9 +133,15 @@ public class MyPageService {
                 .build());
     }
 
+    public BooleanResponse checkFollowing(Integer userId) {
+        return new BooleanResponse(followRepository.existsById(FollowId.builder()
+                .follower(authFacade.getCurrentUserId())
+                .following(userId)
+                .build()));
+    }
+
     private User getUserById(Integer userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("id : { " + userId + " } User Not Found."));
     }
-
 }

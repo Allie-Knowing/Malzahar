@@ -3,6 +3,7 @@ package com.foreveryone.knowing.controller;
 import com.foreveryone.knowing.dto.request.mypage.FollowingRequest;
 import com.foreveryone.knowing.dto.request.mypage.InterestCategoriesRequest;
 import com.foreveryone.knowing.dto.request.mypage.NicknameRequest;
+import com.foreveryone.knowing.dto.response.mypage.BooleanResponse;
 import com.foreveryone.knowing.dto.response.mypage.FollowResponse;
 import com.foreveryone.knowing.dto.response.mypage.InterestResponse;
 import com.foreveryone.knowing.service.MyPageService;
@@ -59,7 +60,7 @@ public class MyPageController {
     @DeleteMapping("/following")
     @ResponseStatus(HttpStatus.NO_CONTENT) @PreAuthorize("isAuthenticated()")
     public void unfollowing(@Valid @RequestBody FollowingRequest request) {
-        System.out.println("팔로잉");
+        System.out.println("언팔로잉");
         myPageService.unfollowing(request.getUserId());
     }
 
@@ -75,5 +76,11 @@ public class MyPageController {
     public List<FollowResponse> queryFollowing(@RequestParam Integer userId) {
         System.out.println("팔로잉 리스트");
         return myPageService.queryFollowing(userId);
+    }
+
+    @GetMapping("/following/{userId}")
+    @ResponseStatus(HttpStatus.OK) @PreAuthorize("isAuthenticated()")
+    public BooleanResponse checkFollowing(@PathVariable Integer userId) {
+        return myPageService.checkFollowing(userId);
     }
 }
