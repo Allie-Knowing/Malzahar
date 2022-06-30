@@ -11,9 +11,9 @@ import com.foreveryone.knowing.entity.Iq;
 import com.foreveryone.knowing.entity.auth.redis.RefreshToken;
 import com.foreveryone.knowing.entity.auth.User;
 import com.foreveryone.knowing.entity.tier.Tier;
-import com.foreveryone.knowing.entity.tier.TierCategory;
 import com.foreveryone.knowing.error.exceptions.NotFoundException;
 import com.foreveryone.knowing.error.exceptions.auth.InvalidIdTokenException;
+import com.foreveryone.knowing.error.exceptions.auth.InvalidUserTokenException;
 import com.foreveryone.knowing.oauth.utils.AppleJwtUtils;
 import com.foreveryone.knowing.error.exceptions.auth.InvalidRefreshTokenException;
 import com.foreveryone.knowing.oauth.client.google.GoogleAuthClient;
@@ -92,8 +92,6 @@ public class AuthService {
                 .name(googleLoginRequest.getName())
                 .provider(GOOGLE)
                 .build();
-
-        System.out.println("GOOGLE 로그인 성공");
 
         return getUserAndReturnToken(userInfo);
     }
@@ -241,6 +239,10 @@ public class AuthService {
         } else {
             user = optionalUser.get();
             user.checkProvider(userInfo.getProvider());
+        }
+
+        if (user.getDeletedAt() != null) {
+            throw new InvalidUserTokenException("탈퇴한 유저입니다.");
         }
 
         return getTokenResponse(user.getId(), isFirstLogin);

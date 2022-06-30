@@ -43,6 +43,9 @@ public class User {
     @Column(name = "last_accessed_at", nullable = false)
     private Timestamp lastAccessedAt;
 
+    @Column(name = "deleted_at")
+    private Timestamp deletedAt;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private final List<Report> reports = new ArrayList<>();
 
